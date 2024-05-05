@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import axios from "axios";
+import { useQuery } from "react-query";
 
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,22 +13,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { Button } from "@/components/ui/button"
-
 export default function Home() {
-  const [data, setData] = useState("Loading...");
-
-  useEffect(() => {
-    fetch(`http://localhost:8080/api/home`)
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data.message);
-      });
-  }, []);
+  const query = useQuery("data", async () =>
+    axios.get("http://localhost:8080/api/home"),
+  );
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      {data}
+    <main className="flex min-h-screen flex-col items-center justify-center">
+      {query.data?.data.message}
+
       <Button variant="outline">Button</Button>
 
       <Card>
