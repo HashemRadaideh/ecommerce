@@ -46,7 +46,7 @@ function onSubmit(values: z.infer<typeof formSchema>) {
   console.log(values);
 }
 
-export default function Home() {
+export default function Signup() {
   const form = useForm();
 
   return (
