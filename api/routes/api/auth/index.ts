@@ -11,7 +11,6 @@ auth
   .post(async (req: express.Request, res: express.Response) => {
     try {
       const { username, email, password } = req.body;
-      console.log("username", username, "email", email, "password", password);
 
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);

@@ -38,6 +38,7 @@ export default function Signin() {
       const response = await axios.post(api + "/api/auth/login", values);
       const { token } = response.data;
       localStorage.setItem("token", token);
+      window.location.href = "/";
     } catch (error) {
       console.error("Authentication failed:", error);
     }
