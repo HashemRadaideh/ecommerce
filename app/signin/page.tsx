@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -26,8 +25,6 @@ const formSchema = z.object({
 });
 
 export default function Signin() {
-  const router = useRouter();
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,7 +38,6 @@ export default function Signin() {
       const response = await axios.post(api + "/api/auth/login", values);
       const { token } = response.data;
       localStorage.setItem("token", token);
-      router.push("/");
     } catch (error) {
       console.error("Authentication failed:", error);
     }

@@ -1,3 +1,7 @@
+import { loggingMiddleware, errorMiddleware } from "./middleware";
+import home from "./routes";
+import auth from "./routes/api/auth";
+import api from "./routes/api/home";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
@@ -7,6 +11,14 @@ dotenv.config();
 
 const app: express.Application = express();
 
+// define api as json
+app.use(express.json());
+
+// static directory
+export const root = "out";
+app.use(express.static(root));
+
+// cors: cross origin resource sharing
 app.use(
   cors({
     origin: `http://${process.env.HOST}:3000`,
@@ -14,14 +26,19 @@ app.use(
   }),
 );
 
-app.use("/api/home", (req, res) => {
-  res.json({ message: "Hello, World!" });
-});
+// middleware
+app.use(loggingMiddleware, errorMiddleware);
+
+// routes
+app.use(api);
+app.use(home);
+app.use(auth);
 
 const server = http.createServer(app);
 
 server.listen(process.env.PORT || 5000, () => {
   console.log(
-    `Server is running on http://${process.env.HOST}:${process.env.PORT}`,
+    `Server is running in ${process.env.NODE_ENV} environment on ` +
+      `http://${process.env.HOST}:${process.env.PORT}`,
   );
 });
