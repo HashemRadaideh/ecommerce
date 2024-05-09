@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { api } from "@/lib/utils";
 
 interface Data {
   message: string;
@@ -19,7 +20,7 @@ interface Data {
 
 export default function Home() {
   const query = useQuery("data", async () =>
-    axios.get<Data>("http://localhost:8080/api/home"),
+    axios.get<Data>(api + "/api/home"),
   );
 
   return (

@@ -1,23 +1,20 @@
 import { useEffect, useState, MouseEvent } from "react";
 
 export const ThemeToggle: React.FC = () => {
-  const [theme, setTheme] = useState<"dark" | "light">("light");
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    if (typeof localStorage === "undefined") return "light";
+    return localStorage.getItem("theme") as "dark" | "light";
+  });
 
   useEffect(() => {
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
     }
   }, [theme]);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      setTheme("dark");
-    } else {
-      setTheme("light");
-    }
-  }, []);
 
   return (
     <button

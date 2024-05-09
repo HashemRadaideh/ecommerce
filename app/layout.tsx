@@ -20,13 +20,26 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const getTheme = () => {
+    if (typeof window === "undefined") return "light";
+
+    const storedTheme = localStorage.getItem("theme");
+
+    if (storedTheme) return storedTheme as "dark" | "light";
+
+    const newTheme = matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+
+    localStorage.setItem("theme", newTheme);
+
+    return newTheme;
+  };
+
   return (
-    <html lang="en">
+    <html className={getTheme()} lang="en">
       <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
-        )}
+        className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
         <Providers>{children}</Providers>
       </body>

@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "concurrently 'nodemon' 'next dev'",
-    "start": "concurrently 'bun api/index.ts' 'next start'",
+    "start": "NODE_ENV=production next build && NODE_ENV=production bun api/index.ts",
     "server:dev": "nodemon",
     "server:start": "bun api/index.ts",
     "client:dev": "next dev",
     "client:build": "next build",
-    "client:start": "next start",
+    "client:start": "bunx serve@latest out",
     "lint": "next lint",
     "tauri": "tauri"
   },
