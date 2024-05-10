@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import express from "express";
 import jwt from "jsonwebtoken";
 
-import { addUser, getUser as getUserByEmail } from "@/api/models/users";
+import { addUser, getUserByEmail } from "@/api/models/users";
 
 const auth = express.Router();
 
@@ -85,6 +85,6 @@ auth
 
 auth
   .route("/api/auth/logout")
-  .post(async (req: express.Request, res: express.Response) => {});
+  .post(async (_req: express.Request, _res: express.Response) => {});
 
 export default auth;

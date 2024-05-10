@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, MouseEvent } from "react";
 
 export const ThemeToggle: React.FC = () => {

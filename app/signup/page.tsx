@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -17,6 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import { api } from "@/lib/utils";
 
 const formSchema = z.object({
@@ -35,13 +37,27 @@ export default function Signup() {
     },
   });
 
+  const router = useRouter();
+
+  const { toast } = useToast();
+
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const response = await axios.post(api + "/api/auth/register", values);
       const { token } = response.data;
       localStorage.setItem("token", token);
+      toast({
+        title: "Signed up successfully!",
+        description: "Redirecting to home page",
+      });
+      router.push("/");
     } catch (error) {
       console.error("Authentication failed:", error);
+      toast({
+        title: "Could not sign up",
+        description: "Please try again",
+        variant: "destructive",
+      });
     }
   };
 

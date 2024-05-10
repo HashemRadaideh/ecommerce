@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const Navbar: React.FC = () => {
   return (
-    <nav className="flex justify-between text-xl border-2">
+    <nav className="flex justify-between text-xl">
       <Link className="p-4" href="/">
         Ecommerce
       </Link>
@@ -15,15 +15,11 @@ export const Navbar: React.FC = () => {
           </li>
 
           <li>
-            <Link href="/home">Home</Link>
+            <Link href="/about">about</Link>
           </li>
 
           <li>
-            <Link href="/about">About</Link>
-          </li>
-
-          <li>
-            <Link href="/chat">chat</Link>
+            <Link href="/cart">cart</Link>
           </li>
 
           <li>

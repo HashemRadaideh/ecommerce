@@ -3,6 +3,7 @@ import Providers from "./providers";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 
+import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 
 const fontSans = FontSans({
@@ -42,6 +43,7 @@ export default function RootLayout({
         className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
         <Providers>{children}</Providers>
+        <Toaster />
       </body>
     </html>
   );

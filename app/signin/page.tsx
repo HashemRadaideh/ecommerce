@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -17,6 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import { api } from "@/lib/utils";
 
 const formSchema = z.object({
@@ -33,14 +35,27 @@ export default function Signin() {
     },
   });
 
+  const router = useRouter();
+
+  const { toast } = useToast();
+
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const response = await axios.post(api + "/api/auth/login", values);
       const { token } = response.data;
       localStorage.setItem("token", token);
-      window.location.href = "/";
+      toast({
+        title: "Signed in successfully!",
+        description: "Redirecting to home page",
+      });
+      router.push("/");
     } catch (error) {
       console.error("Authentication failed:", error);
+      toast({
+        title: "Could not sign in",
+        description: "Please try again",
+        variant: "destructive",
+      });
     }
   };
 
