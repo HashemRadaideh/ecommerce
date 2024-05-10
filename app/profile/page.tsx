@@ -33,7 +33,7 @@ export default function DemoPage() {
 
   return (
     <>
-      <Navbar></Navbar>
+      <Navbar />
       <div className="container mx-auto py-10">
         {query.data && (
           <Card>

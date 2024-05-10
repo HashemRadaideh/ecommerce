@@ -1,4 +1,5 @@
 import pool from ".";
+import bcrypt from "bcrypt";
 
 export interface Admin {
   id: Buffer;
@@ -14,9 +15,12 @@ export async function addAdmin(
   email: string,
   password: string,
 ) {
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
   return pool.query(
-    `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
-    [username, email, password],
+    `INSERT INTO admins (username, email, password) VALUES (?, ?, ?)`,
+    [username, email, hashedPassword],
   );
 }
 

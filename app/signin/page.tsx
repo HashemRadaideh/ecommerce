@@ -2,12 +2,18 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -48,29 +54,38 @@ export default function Signin() {
         title: "Signed in successfully!",
         description: "Redirecting to home page",
       });
-      router.push("/");
+      router.replace("/");
     } catch (error) {
-      console.error("Authentication failed:", error);
       toast({
         title: "Could not sign in",
-        description: "Please try again",
+        description: "If you don't have an account yet, please sign up first.",
         variant: "destructive",
+        action: (
+          <Button type="button" onClick={() => router.push("/signup")}>
+            Sign up
+          </Button>
+        ),
       });
     }
   };
 
   return (
     <>
+      <nav className="pl-4 pt-4">
+        <Button type="button" onClick={() => router.back()}>
+          go back
+        </Button>
+      </nav>
       <main className="flex min-h-screen flex-col items-center justify-center">
         <Card>
-          <CardHeader className="items-center justify-center">
-            Sign in
+          <CardHeader className="text-4xl font-extrabold items-center justify-center">
+            Sign In
           </CardHeader>
           <CardContent>
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(handleSubmit)}
-                className="space-y-8"
+                className="space-y-4"
               >
                 <FormField
                   control={form.control}
@@ -104,10 +119,20 @@ export default function Signin() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Log in</Button>
+                <Button type="submit" className="w-full">
+                  Sign in
+                </Button>
               </form>
             </Form>
           </CardContent>
+          <CardFooter className="text-sm items-center justify-center">
+            <span>
+              Create an account for free!{" "}
+              <Link href="/signup" className="text-sky-500 underline">
+                Sign up
+              </Link>
+            </span>
+          </CardFooter>
         </Card>
       </main>
     </>

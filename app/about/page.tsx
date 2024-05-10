@@ -1,6 +1,9 @@
-export default function Cart() {
+import { Navbar } from "@/components/Navbar";
+
+export default function About() {
   return (
     <>
+      <Navbar />
       <p> Hello </p>
     </>
   );

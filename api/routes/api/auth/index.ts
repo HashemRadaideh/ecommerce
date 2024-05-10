@@ -12,24 +12,22 @@ auth
     try {
       const { username, email, password } = req.body;
 
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-
       if (await getUserByEmail(email)) {
         res.status(400).json({ error: "User already exists" });
         return;
       }
 
       try {
-        addUser(username, email, hashedPassword);
+        addUser(username, email, password);
       } catch (error) {
         console.error("Transaction failed:", error);
         res.status(500).json({ error: "Registration failed" });
+        return;
       }
 
       const user = await getUserByEmail(email);
 
-      const token = jwt.sign({ user_id: user?.user_id }, "secret", {
+      const token = jwt.sign({ id: user?.id }, "secret", {
         expiresIn: "30d",
       });
 
@@ -65,7 +63,7 @@ auth
         return res.status(401).json({ error: "Invalid email or password" });
       }
 
-      const token = jwt.sign({ user_id: user?.user_id }, "secret", {
+      const token = jwt.sign({ id: user?.id }, "secret", {
         expiresIn: "30d",
       });
 
@@ -85,6 +83,10 @@ auth
 
 auth
   .route("/api/auth/logout")
+  .post(async (_req: express.Request, _res: express.Response) => {});
+
+auth
+  .route("/api/auth/unregister")
   .post(async (_req: express.Request, _res: express.Response) => {});
 
 export default auth;
