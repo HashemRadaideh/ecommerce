@@ -13,7 +13,7 @@ export default function ProductCard({
   children: React.ReactNode;
 }) {
   return (
-    <Card className="hover:shadow-gray-500">
+    <Card className="hover:outline hover:outline-gray-500">
       <CardHeader>
         <CardTitle>Fetching data from backend</CardTitle>
         <CardDescription>Please wait</CardDescription>
