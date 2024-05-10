@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 import { addUser, getUserByEmail } from "@/api/models/users";
 
-const auth = express.Router();
+export const auth = express.Router();
 
 auth
   .route("/api/auth/register")
@@ -88,5 +88,3 @@ auth
 auth
   .route("/api/auth/unregister")
   .post(async (_req: express.Request, _res: express.Response) => {});
-
-export default auth;

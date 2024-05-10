@@ -2,7 +2,8 @@ import express from "express";
 
 import { getUsers } from "@/api/models/users";
 
-const users = express.Router();
+export const users = express.Router();
+
 users
   .route("/api/users")
   .get(async (_req: express.Request, res: express.Response) => {
@@ -14,5 +15,3 @@ users
       res.status(500).json({ error: "Registration failed" });
     }
   });
-
-export default users;

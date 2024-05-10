@@ -1,8 +1,9 @@
 import pool from ".";
 import bcrypt from "bcrypt";
+import { v4 as uuidv4 } from "uuid";
 
 export interface Admin {
-  id: Buffer;
+  id: string;
   username: string;
   email: string;
   password: string;
@@ -10,7 +11,7 @@ export interface Admin {
   updated_at: Date;
 }
 
-export async function addAdmin(
+export async function addUser(
   username: string,
   email: string,
   password: string,
@@ -19,8 +20,8 @@ export async function addAdmin(
   const hashedPassword = await bcrypt.hash(password, salt);
 
   return pool.query(
-    `INSERT INTO admins (username, email, password) VALUES (?, ?, ?)`,
-    [username, email, hashedPassword],
+    `INSERT INTO users (id, username, email, password) VALUES (?, ?, ?, ?)`,
+    [uuidv4(), username, email, hashedPassword],
   );
 }
 

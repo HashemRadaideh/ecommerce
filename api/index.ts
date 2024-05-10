@@ -1,8 +1,8 @@
 import { loggingMiddleware, errorMiddleware } from "./middleware";
-import home from "./routes";
-import auth from "./routes/api/auth";
-import api from "./routes/api/home";
-import users from "./routes/api/users";
+import { home } from "./routes";
+import { auth } from "./routes/api/auth";
+import { api } from "./routes/api/home";
+import { users } from "./routes/api/users";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
