@@ -1,27 +1,46 @@
-import { Payment, columns } from "./column";
-import { DataTable } from "./data-table";
+"use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { ColumnDef } from "@tanstack/react-table";
+import axios from "axios";
+
+import { User } from "@/api/models/users";
+import { DataTable } from "@/components/DataTable";
+import { Navbar } from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
+import { api } from "@/lib/utils";
 
-async function getData(): Promise<Payment[]> {
-  return [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-  ];
-}
+const columns: ColumnDef<User>[] = [
+  {
+    accessorKey: "username",
+    header: "Username",
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+  },
+  {
+    accessorKey: "password",
+    header: "Password",
+  },
+];
 
-export default async function DemoPage() {
-  const data = await getData();
+export default function DemoPage() {
+  const query = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => axios.get<User[]>(api + "/api/users"),
+  });
 
   return (
-    <div className="container mx-auto py-10">
-      <Card className="w-9/12">
-        <DataTable columns={columns} data={data} />
-      </Card>
-    </div>
+    <>
+      <Navbar></Navbar>
+      <div className="container mx-auto py-10">
+        {query.data && (
+          <Card>
+            <DataTable columns={columns} data={query.data.data} />
+          </Card>
+        )}
+      </div>
+    </>
   );
 }

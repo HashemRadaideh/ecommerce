@@ -1,17 +1,11 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useQuery } from "react-query";
 
 import { Navbar } from "@/components/Navbar";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import ProductCard from "@/components/ProductCard";
+import ProductSkeleton from "@/components/ProductSkeleton";
 import { api } from "@/lib/utils";
 
 interface Data {
@@ -19,26 +13,22 @@ interface Data {
 }
 
 export default function Home() {
-  const query = useQuery("data", async () =>
-    axios.get<Data>(api + "/api/home"),
-  );
+  const query = useQuery({
+    queryKey: ["data"],
+    queryFn: async () => axios.get<Data[]>(api + "/api/home"),
+  });
 
   return (
     <>
       <Navbar></Navbar>
-      <main className="flex min-h-screen flex-col items-center justify-center">
-        <Card>
-          <CardHeader>
-            <CardTitle>Fetching data from backend</CardTitle>
-            <CardDescription>Please wait</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p>{query.isLoading ? "Loading..." : query.data?.data.message}</p>
-          </CardContent>
-          <CardFooter>
-            <p>Hope you enjoyed this demo :3</p>
-          </CardFooter>
-        </Card>
+      <main className="grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols7 grid-rows-3 gap-2 p-2">
+        {query.isLoading
+          ? Array.from({ length: 30 }, (_, index) => (
+              <ProductSkeleton key={index}></ProductSkeleton>
+            ))
+          : query.data?.data.map((item, index) => (
+              <ProductCard key={index}>{item.message}</ProductCard>
+            ))}
       </main>
     </>
   );
