@@ -1,6 +1,6 @@
 import pool from ".";
 
-export interface User {
+export interface Admin {
   id: Buffer;
   username: string;
   email: string;
@@ -9,7 +9,7 @@ export interface User {
   updated_at: Date;
 }
 
-export async function addUser(
+export async function addAdmin(
   username: string,
   email: string,
   password: string,
@@ -22,20 +22,20 @@ export async function addUser(
 
 export async function getAdminByUsername(username: string) {
   const [rows]: any = await pool.query(
-    `SELECT * FROM user WHERE username = ?`,
+    `SELECT * FROM admins WHERE username = ?`,
     [username],
   );
-  return rows[0] as User | undefined;
+  return rows[0] as Admin | undefined;
 }
 
-export async function getUserByEmail(email: string) {
-  const [rows]: any = await pool.query(`SELECT * FROM users WHERE email = ?`, [
+export async function getAdminByEmail(email: string) {
+  const [rows]: any = await pool.query(`SELECT * FROM admins WHERE email = ?`, [
     email,
   ]);
-  return rows[0] as User | undefined;
+  return rows[0] as Admin | undefined;
 }
 
-export async function getUsers() {
-  const [rows]: any = await pool.query(`SELECT * FROM users`);
-  return rows as User[] | undefined;
+export async function getAdmins() {
+  const [rows]: any = await pool.query(`SELECT * FROM admins`);
+  return rows as Admin[] | undefined;
 }
