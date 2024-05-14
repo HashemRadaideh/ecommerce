@@ -2,6 +2,8 @@ import { loggingMiddleware, errorMiddleware } from "./middleware";
 import { home } from "./routes";
 import { auth } from "./routes/api/auth";
 import { api } from "./routes/api/home";
+import { product } from "./routes/api/product";
+import { products } from "./routes/api/products";
 import { users } from "./routes/api/users";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -35,6 +37,8 @@ app.use(api);
 app.use(home);
 app.use(auth);
 app.use(users);
+app.use(product);
+app.use(products);
 
 const server = http.createServer(app);
 
