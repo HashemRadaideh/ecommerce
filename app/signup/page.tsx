@@ -29,7 +29,7 @@ import { api } from "@/lib/utils";
 
 const formSchema = z.object({
   username: z.string().min(1),
-  email: z.string().min(5),
+  email: z.string().email().min(5),
   password: z.string().min(8),
 });
 
@@ -139,7 +139,7 @@ export default function Signup() {
           </CardContent>
           <CardFooter className="text-sm items-center justify-center">
             <span>
-              Create an account for free!{" "}
+              Already have an account!{" "}
               <Link href="/signin" className="text-sky-500 underline">
                 Sign in
               </Link>
