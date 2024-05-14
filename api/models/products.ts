@@ -20,7 +20,7 @@ export async function addProduct(
   category_id: string,
 ) {
   return pool.query(
-    `INSERT INTO users (id, name, description, price, stock_quantity, category_id) VALUES (?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO products (id, name, description, price, stock_quantity, category_id) VALUES (?, ?, ?, ?, ?, ?)`,
     [uuidv4(), name, description, price, stock_quantity, category_id],
   );
 }

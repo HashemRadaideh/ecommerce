@@ -25,9 +25,9 @@ export async function addUser(
   );
 }
 
-export async function getAdminByUsername(username: string) {
+export async function getUserByUsername(username: string) {
   const [rows]: any = await pool.query(
-    `SELECT * FROM user WHERE username = ?`,
+    `SELECT * FROM users WHERE username = ?`,
     [username],
   );
   return rows[0] as User | undefined;

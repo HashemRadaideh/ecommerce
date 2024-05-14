@@ -11,9 +11,17 @@ export interface Category {
 
 export async function addCategory(name: string, description: string) {
   return pool.query(
-    `INSERT INTO users (id, name, description) VALUES (?, ?, ?)`,
+    `INSERT INTO categories (id, name, description) VALUES (?, ?, ?)`,
     [uuidv4(), name, description],
   );
+}
+
+export async function getCategoryByName(name: string) {
+  const [rows]: any = await pool.query(
+    `SELECT * FROM categories where name = ?`,
+    [name],
+  );
+  return rows[0] as Category | undefined;
 }
 
 export async function getCategories() {

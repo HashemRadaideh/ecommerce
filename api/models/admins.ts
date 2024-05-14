@@ -20,7 +20,7 @@ export async function addUser(
   const hashedPassword = await bcrypt.hash(password, salt);
 
   return pool.query(
-    `INSERT INTO users (id, username, email, password) VALUES (?, ?, ?, ?)`,
+    `INSERT INTO admins (id, username, email, password) VALUES (?, ?, ?, ?)`,
     [uuidv4(), username, email, hashedPassword],
   );
 }

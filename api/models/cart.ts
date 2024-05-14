@@ -16,7 +16,7 @@ export async function addCart(
   quantity: number,
 ) {
   return pool.query(
-    `INSERT INTO users (id, user_id, product_id, quantity) VALUES (?, ?, ?, ?)`,
+    `INSERT INTO carts (id, user_id, product_id, quantity) VALUES (?, ?, ?, ?)`,
     [uuidv4(), user_id, product_id, quantity],
   );
 }
