@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { api } from "@/lib/utils";
+import { api, cn } from "@/lib/utils";
 
 const formSchema = z.object({
   email: z.string().email().min(5),
@@ -71,21 +71,29 @@ export default function Signin() {
 
   return (
     <>
-      <nav className="pl-4 pt-4">
+      <nav className={cn("pl-4 pt-4")}>
         <Button type="button" onClick={() => router.back()}>
           go back
         </Button>
       </nav>
-      <main className="flex min-h-screen flex-col items-center justify-center">
+
+      <main
+        className={cn("flex min-h-screen flex-col items-center justify-center")}
+      >
         <Card>
-          <CardHeader className="text-4xl font-extrabold items-center justify-center">
+          <CardHeader
+            className={cn(
+              "text-4xl font-extrabold items-center justify-center",
+            )}
+          >
             Sign In
           </CardHeader>
+
           <CardContent>
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(handleSubmit)}
-                className="space-y-4"
+                className={cn("space-y-4")}
               >
                 <FormField
                   control={form.control}
@@ -101,6 +109,7 @@ export default function Signin() {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="password"
@@ -119,16 +128,18 @@ export default function Signin() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full">
+
+                <Button type="submit" className={cn("w-full")}>
                   Sign in
                 </Button>
               </form>
             </Form>
           </CardContent>
-          <CardFooter className="text-sm items-center justify-center">
+
+          <CardFooter className={cn("text-sm items-center justify-center")}>
             <span>
               Create an account for free!{" "}
-              <Link href="/signup" className="text-sky-500 underline">
+              <Link href="/signup" className={cn("text-sky-500 underline")}>
                 Sign up
               </Link>
             </span>

@@ -2,6 +2,8 @@
 
 import { useEffect, useState, MouseEvent } from "react";
 
+import { cn } from "@/lib/utils";
+
 export const ThemeToggle: React.FC = () => {
   const [theme, setTheme] = useState<"dark" | "light">(() => {
     if (typeof localStorage === "undefined") return "light";
@@ -20,14 +22,14 @@ export const ThemeToggle: React.FC = () => {
 
   return (
     <button
-      className="ml-0"
+      className={cn("ml-0")}
       onClick={(event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         setTheme(theme == "dark" ? "light" : "dark");
       }}
     >
-      <ModeToggleIcon theme={theme} className="h-4 w-4" />
-      <span className="sr-only">Theme mode toggle</span>
+      <ModeToggleIcon theme={theme} className={cn("h-4 w-4")} />
+      <span className={cn("sr-only")}>Theme mode toggle</span>
     </button>
   );
 };
@@ -40,7 +42,7 @@ function ModeToggleIcon(props: {
     <>
       {props.theme == "dark" ? (
         <svg
-          className={props.className}
+          className={cn(props.className)}
           xmlns="http://www.w3.org/2000/svg"
           shapeRendering="geometricPrecision"
           textRendering="geometricPrecision"
@@ -56,7 +58,7 @@ function ModeToggleIcon(props: {
         </svg>
       ) : (
         <svg
-          className={props.className}
+          className={cn(props.className)}
           xmlns="http://www.w3.org/2000/svg"
           shapeRendering="geometricPrecision"
           textRendering="geometricPrecision"
