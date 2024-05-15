@@ -30,17 +30,17 @@ export async function getUserByUsername(username: string) {
     `SELECT * FROM users WHERE username = ?`,
     [username],
   );
-  return rows[0] as User | undefined;
+  return rows[0] as User;
 }
 
 export async function getUserByEmail(email: string) {
   const [rows]: any = await pool.query(`SELECT * FROM users WHERE email = ?`, [
     email,
   ]);
-  return rows[0] as User | undefined;
+  return rows[0] as User;
 }
 
 export async function getUsers() {
   const [rows]: any = await pool.query(`SELECT * FROM users`);
-  return rows as User[] | undefined;
+  return rows as User[];
 }

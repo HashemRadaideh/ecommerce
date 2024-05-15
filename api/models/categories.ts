@@ -21,10 +21,10 @@ export async function getCategoryByName(name: string) {
     `SELECT * FROM categories where name = ?`,
     [name],
   );
-  return rows[0] as Category | undefined;
+  return rows[0] as Category;
 }
 
 export async function getCategories() {
   const [rows]: any = await pool.query(`SELECT * FROM categories`);
-  return rows as Category[] | undefined;
+  return rows as Category[];
 }

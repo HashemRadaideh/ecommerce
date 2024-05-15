@@ -30,17 +30,17 @@ export async function getAdminByUsername(username: string) {
     `SELECT * FROM admins WHERE username = ?`,
     [username],
   );
-  return rows[0] as Admin | undefined;
+  return rows[0] as Admin;
 }
 
 export async function getAdminByEmail(email: string) {
   const [rows]: any = await pool.query(`SELECT * FROM admins WHERE email = ?`, [
     email,
   ]);
-  return rows[0] as Admin | undefined;
+  return rows[0] as Admin;
 }
 
 export async function getAdmins() {
   const [rows]: any = await pool.query(`SELECT * FROM admins`);
-  return rows as Admin[] | undefined;
+  return rows as Admin[];
 }

@@ -23,5 +23,5 @@ export async function addCart(
 
 export async function getCarts() {
   const [rows]: any = await pool.query(`SELECT * FROM carts`);
-  return rows as Cart[] | undefined;
+  return rows as Cart[];
 }

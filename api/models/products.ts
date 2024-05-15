@@ -27,5 +27,5 @@ export async function addProduct(
 
 export async function getProducts() {
   const [rows]: any = await pool.query(`SELECT * FROM products`);
-  return rows as Product[] | undefined;
+  return rows as Product[];
 }
