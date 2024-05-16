@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "concurrently 'nodemon' 'next dev'",
-    "start": "NODE_ENV=production next build && NODE_ENV=production bun api/index.ts",
+    "start": "concurrently 'bun client:build && bun client:start' 'bun server:start'",
     "server:dev": "nodemon",
-    "server:start": "bun api/index.ts",
+    "server:start": "NODE_ENV=production bun api/index.ts",
     "client:dev": "next dev",
     "client:build": "next build",
-    "client:start": "bunx serve@latest out",
+    "client:start": "next start",
     "lint": "next lint",
     "tauri": "tauri"
   },
@@ -39,6 +39,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.51.4",
+    "sharp": "^0.33.4",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^9.0.1",
