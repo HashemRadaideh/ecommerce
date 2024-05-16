@@ -23,8 +23,8 @@ import { api, cn } from "@/lib/utils";
 
 export default function Home() {
   const query = useQuery({
-    queryKey: ["data"],
-    queryFn: async () => axios.get<Product[]>(api + "/api/products"),
+    queryKey: ["home_page"],
+    queryFn: async () => axios.get<Product[]>(`${api}/api/products`),
   });
 
   return (
@@ -35,11 +35,7 @@ export default function Home() {
         <Input placeholder="Search" className={cn("w-4/6 mb-5 border-2")} />
 
         <Carousel
-          plugins={[
-            Autoplay({
-              delay: 2000,
-            }),
-          ]}
+          plugins={[Autoplay({ delay: 2000 })]}
           className={cn("w-full max-w-lg")}
         >
           <CarouselContent>
@@ -68,7 +64,12 @@ export default function Home() {
                             "flex aspect-[16/9] items-center justify-center p-6",
                           )}
                         >
-                          <Image src={""} alt={product.name} />
+                          <Image
+                            src={"/placeholder.png"}
+                            alt={product.name}
+                            width={500}
+                            height={500}
+                          />
                         </CardContent>
                       </Card>
                     </Link>
@@ -93,8 +94,8 @@ export default function Home() {
                   <ProductCard
                     title={product.name}
                     description={product.description}
-                    image={""}
-                    imageAlt={""}
+                    image={"/placeholder.png"}
+                    imageAlt={product.name}
                     price={product.price}
                     stock={product.stock_quantity}
                   />

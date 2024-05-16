@@ -25,6 +25,13 @@ export async function addProduct(
   );
 }
 
+export async function getProductById(id: string) {
+  const [rows]: any = await pool.query(`SELECT * FROM products WHERE id = ?`, [
+    id,
+  ]);
+  return rows[0] as Product;
+}
+
 export async function getProducts() {
   const [rows]: any = await pool.query(`SELECT * FROM products`);
   return rows as Product[];

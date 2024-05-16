@@ -47,7 +47,7 @@ export default function Signin() {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post(api + "/api/auth/login", values);
+      const response = await axios.post(`${api}/api/auth/login`, values);
       const { token } = response.data;
       localStorage.setItem("token", token);
       toast({

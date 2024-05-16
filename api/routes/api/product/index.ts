@@ -1,12 +1,22 @@
 import express from "express";
 
 import { getCategoryByName } from "@/api/models/categories";
-import { addProduct } from "@/api/models/products";
+import { addProduct, getProductById } from "@/api/models/products";
 
 export const product = express.Router();
 
 product
   .route("/api/product")
+  .get(async (req: express.Request, res: express.Response) => {
+    try {
+      const { id } = req.query;
+      const products = await getProductById(id as string);
+      res.json(products);
+    } catch (error) {
+      console.error("Failed to get all products", error);
+      res.status(500).json({ error: "Failed to get all products" });
+    }
+  })
   .post(async (req: express.Request, res: express.Response) => {
     try {
       const { name, description, category, price, stock_quantity } = req.body;

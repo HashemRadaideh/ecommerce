@@ -21,7 +21,7 @@ export default function ProductSkeleton() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Skeleton className={cn("h-5 w-[200px]")} />
+        <Skeleton className={cn("h-5 w-[500px]")} />
       </CardContent>
       <CardFooter>
         <Skeleton className={cn("h-5 w-[200px]")} />

@@ -44,7 +44,7 @@ export default function AdminProducts() {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post(api + "/api/product", values);
+      await axios.post(`${api}/api/product`, values);
       toast({
         title: "Added product successfully",
       });

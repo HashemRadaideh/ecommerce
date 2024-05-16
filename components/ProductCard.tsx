@@ -32,7 +32,7 @@ export default function ProductCard({
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <Image src={image} alt={imageAlt} />
+        <Image src={image} width={500} height={500} alt={imageAlt} />
       </CardContent>
       <CardFooter className={cn("space-y-1 flex flex-col")}>
         <p>{price + "$"}</p>

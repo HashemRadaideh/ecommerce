@@ -28,7 +28,7 @@ const columns: ColumnDef<User>[] = [
 export default function AdminUsers() {
   const query = useQuery({
     queryKey: ["users"],
-    queryFn: async () => axios.get<User[]>(api + "/api/users"),
+    queryFn: async () => axios.get<User[]>(`${api}/api/users`),
   });
 
   return (
