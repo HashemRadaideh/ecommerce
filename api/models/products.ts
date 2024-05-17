@@ -1,16 +1,6 @@
-import pool from ".";
-import { v4 as uuidv4 } from "uuid";
+import { PrismaClient } from "@prisma/client";
 
-export interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  stock_quantity: number;
-  category_id: string;
-  created_at: Date;
-  updated_at: Date;
-}
+const prisma = new PrismaClient();
 
 export async function addProduct(
   name: string,
@@ -19,20 +9,43 @@ export async function addProduct(
   stock_quantity: number,
   category_id: string,
 ) {
-  return pool.query(
-    `INSERT INTO products (id, name, description, price, stock_quantity, category_id) VALUES (?, ?, ?, ?, ?, ?)`,
-    [uuidv4(), name, description, price, stock_quantity, category_id],
-  );
+  try {
+    const product = await prisma.product.create({
+      data: {
+        name,
+        description,
+        price,
+        stockQuantity: stock_quantity,
+        categoryId: category_id,
+      },
+    });
+    return product;
+  } catch (error) {
+    console.error("Error creating product:", error);
+    throw new Error("Could not create product");
+  }
 }
 
 export async function getProductById(id: string) {
-  const [rows]: any = await pool.query(`SELECT * FROM products WHERE id = ?`, [
-    id,
-  ]);
-  return rows[0] as Product;
+  try {
+    const product = await prisma.product.findUnique({
+      where: {
+        id,
+      },
+    });
+    return product;
+  } catch (error) {
+    console.error("Error fetching product by ID:", error);
+    throw new Error("Could not fetch product by ID");
+  }
 }
 
 export async function getProducts() {
-  const [rows]: any = await pool.query(`SELECT * FROM products`);
-  return rows as Product[];
+  try {
+    const products = await prisma.product.findMany();
+    return products;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    throw new Error("Could not fetch products");
+  }
 }

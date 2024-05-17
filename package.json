@@ -7,14 +7,24 @@
     "start": "concurrently 'bun client:build && bun client:start' 'bun server:start'",
     "server:dev": "nodemon",
     "server:start": "NODE_ENV=production bun api/index.ts",
+    "next": "next",
     "client:dev": "next dev",
     "client:build": "next build",
     "client:start": "next start",
-    "lint": "next lint",
-    "tauri": "tauri"
+    "db:mysql": "docker run --name mysqldb -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql",
+    "db:postgres": "docker run --name postgresdb -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres",
+    "prisma": "prisma",
+    "studio": "prisma studio",
+    "migrate": "prisma migrate dev",
+    "pull": "prisma db pull",
+    "push": "prisma db push",
+    "generate": "prisma generate",
+    "tauri": "tauri",
+    "lint": "next lint"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@prisma/client": "^5.14.0",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
@@ -34,7 +44,6 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.378.0",
-    "mysql2": "^3.9.7",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
@@ -42,7 +51,6 @@
     "sharp": "^0.33.4",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "uuid": "^9.0.1",
     "zod": "^3.23.6"
   },
   "devDependencies": {
@@ -63,6 +71,7 @@
     "postcss": "^8",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.14",
+    "prisma": "^5.14.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

@@ -1,10 +1,10 @@
 "use client";
 
+import { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import axios from "axios";
 
-import { User } from "@/api/models/users";
 import Adminnav from "@/components/Adminnav";
 import { DataTable } from "@/components/DataTable";
 import { Card } from "@/components/ui/card";
@@ -28,7 +28,7 @@ const columns: ColumnDef<User>[] = [
 export default function AdminUsers() {
   const query = useQuery({
     queryKey: ["users"],
-    queryFn: async () => axios.get<User[]>(`${api}/api/users`),
+    queryFn: async () => axios.get(`${api}/api/users`),
   });
 
   return (

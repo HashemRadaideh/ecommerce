@@ -1,17 +1,9 @@
-import pool from ".";
+import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
-import { v4 as uuidv4 } from "uuid";
 
-export interface Admin {
-  id: string;
-  username: string;
-  email: string;
-  password: string;
-  created_at: Date;
-  updated_at: Date;
-}
+const prisma = new PrismaClient();
 
-export async function addUser(
+export async function addAdmin(
   username: string,
   email: string,
   password: string,
@@ -19,28 +11,55 @@ export async function addUser(
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  return pool.query(
-    `INSERT INTO admins (id, username, email, password) VALUES (?, ?, ?, ?)`,
-    [uuidv4(), username, email, hashedPassword],
-  );
+  try {
+    const admin = await prisma.admin.create({
+      data: {
+        username,
+        email,
+        password: hashedPassword,
+      },
+    });
+    return admin;
+  } catch (error) {
+    console.error("Error creating admin:", error);
+    throw new Error("Could not create admin");
+  }
 }
 
 export async function getAdminByUsername(username: string) {
-  const [rows]: any = await pool.query(
-    `SELECT * FROM admins WHERE username = ?`,
-    [username],
-  );
-  return rows[0] as Admin;
+  try {
+    const admin = await prisma.admin.findUnique({
+      where: {
+        username,
+      },
+    });
+    return admin;
+  } catch (error) {
+    console.error("Error fetching admin by username:", error);
+    throw new Error("Could not fetch admin by username");
+  }
 }
 
 export async function getAdminByEmail(email: string) {
-  const [rows]: any = await pool.query(`SELECT * FROM admins WHERE email = ?`, [
-    email,
-  ]);
-  return rows[0] as Admin;
+  try {
+    const admin = await prisma.admin.findUnique({
+      where: {
+        email,
+      },
+    });
+    return admin;
+  } catch (error) {
+    console.error("Error fetching admin by email:", error);
+    throw new Error("Could not fetch admin by email");
+  }
 }
 
 export async function getAdmins() {
-  const [rows]: any = await pool.query(`SELECT * FROM admins`);
-  return rows as Admin[];
+  try {
+    const admins = await prisma.admin.findMany();
+    return admins;
+  } catch (error) {
+    console.error("Error fetching admins:", error);
+    throw new Error("Could not fetch admins");
+  }
 }

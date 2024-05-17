@@ -1,30 +1,42 @@
-import pool from ".";
-import { v4 as uuidv4 } from "uuid";
+import { PrismaClient } from "@prisma/client";
 
-export interface Category {
-  id: string;
-  name: string;
-  description: string;
-  created_at: Date;
-  updated_at: Date;
-}
+const prisma = new PrismaClient();
 
 export async function addCategory(name: string, description: string) {
-  return pool.query(
-    `INSERT INTO categories (id, name, description) VALUES (?, ?, ?)`,
-    [uuidv4(), name, description],
-  );
+  try {
+    const category = await prisma.category.create({
+      data: {
+        name,
+        description,
+      },
+    });
+    return category;
+  } catch (error) {
+    console.error("Error creating category:", error);
+    throw new Error("Could not create category");
+  }
 }
 
 export async function getCategoryByName(name: string) {
-  const [rows]: any = await pool.query(
-    `SELECT * FROM categories where name = ?`,
-    [name],
-  );
-  return rows[0] as Category;
+  try {
+    const category = await prisma.category.findUnique({
+      where: {
+        name,
+      },
+    });
+    return category;
+  } catch (error) {
+    console.error("Error fetching category by name:", error);
+    throw new Error("Could not fetch category by name");
+  }
 }
 
 export async function getCategories() {
-  const [rows]: any = await pool.query(`SELECT * FROM categories`);
-  return rows as Category[];
+  try {
+    const categories = await prisma.category.findMany();
+    return categories;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw new Error("Could not fetch categories");
+  }
 }

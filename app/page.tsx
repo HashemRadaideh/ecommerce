@@ -1,12 +1,12 @@
 "use client";
 
+import { Product } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Product } from "@/api/models/products";
 import { Navbar } from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import ProductSkeleton from "@/components/ProductSkeleton";
@@ -47,11 +47,7 @@ export default function Home() {
                         className={cn(
                           "flex aspect-[16/9] items-center justify-center p-6",
                         )}
-                      >
-                        <span className={cn("text-4xl font-semibold")}>
-                          {index + 1}
-                        </span>
-                      </CardContent>
+                      ></CardContent>
                     </Card>
                   </CarouselItem>
                 ))
@@ -93,11 +89,11 @@ export default function Home() {
                 <Link href={`/product/${product.id}`} key={product.id}>
                   <ProductCard
                     title={product.name}
-                    description={product.description}
+                    description={product.description || ""}
                     image={"/placeholder.png"}
                     imageAlt={product.name}
                     price={product.price}
-                    stock={product.stock_quantity}
+                    stock={product.stockQuantity}
                   />
                 </Link>
               ))}

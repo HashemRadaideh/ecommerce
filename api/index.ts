@@ -24,7 +24,7 @@ app.use(express.static(root));
 // cors: cross origin resource sharing
 app.use(
   cors({
-    origin: `http://${process.env.HOST}:3000`,
+    origin: process.env.FRONTEND_DOMAIN || "http://localhost:3000",
     methods: ["GET", "POST", "DELETE", "PUT"],
   }),
 );
@@ -42,9 +42,9 @@ app.use(products);
 
 const server = http.createServer(app);
 
-server.listen(process.env.PORT || 5000, () => {
+server.listen(process.env.PORT || 8080, () => {
   console.log(
     `Server is running in ${process.env.NODE_ENV} environment on ` +
-      `http://${process.env.HOST}:${process.env.PORT}`,
+      `http://${process.env.HOST || "localhost"}:${process.env.PORT || 8080}`,
   );
 });

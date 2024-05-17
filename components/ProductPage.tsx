@@ -1,11 +1,11 @@
 "use client";
 
 import { Skeleton } from "./ui/skeleton";
+import { Product } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
 
-import { Product } from "@/api/models/products";
 import { Button } from "@/components/ui/button";
 import {
   Card,
