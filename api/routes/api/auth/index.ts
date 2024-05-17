@@ -27,7 +27,7 @@ auth
 
       const user = await getUserByEmail(email);
 
-      const token = jwt.sign({ id: user?.id }, "secret", {
+      const token = jwt.sign({ id: user?.id }, process.env.SECRET || "secret", {
         expiresIn: "30d",
       });
 
@@ -63,7 +63,7 @@ auth
         return res.status(401).json({ error: "Invalid email or password" });
       }
 
-      const token = jwt.sign({ id: user?.id }, "secret", {
+      const token = jwt.sign({ id: user?.id }, process.env.SECRET || "secret", {
         expiresIn: "30d",
       });
 
@@ -83,8 +83,24 @@ auth
 
 auth
   .route("/api/auth/logout")
-  .post(async (_req: express.Request, _res: express.Response) => {});
+  .post(async (_req: express.Request, res: express.Response) => {
+    try {
+      res.clearCookie("token");
+      res.status(200).json({ message: "Logged out successfully" });
+    } catch (error) {
+      console.error("Logout failed:", error);
+      res.status(500).json({ error: "Logout failed" });
+    }
+  });
 
 auth
   .route("/api/auth/unregister")
-  .post(async (_req: express.Request, _res: express.Response) => {});
+  .delete(async (_req: express.Request, res: express.Response) => {
+    try {
+      res.clearCookie("token");
+      res.status(200).json({ message: "User unregistered successfully" });
+    } catch (error) {
+      console.error("Unregister failed:", error);
+      res.status(500).json({ error: "Unregister failed" });
+    }
+  });
