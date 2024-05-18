@@ -1,4 +1,5 @@
 import { ThemeToggle } from "./ThemeToggle";
+import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
@@ -17,11 +18,10 @@ export const Navbar: React.FC = () => {
           </li>
 
           <li>
-            <Link href="/about">about</Link>
-          </li>
-
-          <li>
-            <Link href="/cart">cart</Link>
+            <Link href="/cart">
+              <ShoppingCart />
+              <span className={cn("sr-only")}>cart</span>
+            </Link>
           </li>
 
           <li>

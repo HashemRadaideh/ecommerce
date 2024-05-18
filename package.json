@@ -22,7 +22,7 @@
     "push": "prisma db push",
     "generate": "prisma generate",
     "tauri": "tauri",
-    "prettier": "prettier . --write",
+    "prettier": "prettier . --write --log-level warn",
     "lint": "next lint",
     "check": "bun prettier && bun lint"
   },

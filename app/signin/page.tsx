@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { ArrowBigLeftDash } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -78,7 +79,8 @@ export default function Signin() {
     <>
       <nav className={cn("pl-4 pt-4")}>
         <Button type="button" onClick={() => router.back()}>
-          go back
+          <ArrowBigLeftDash />
+          <span className={cn("sr-only")}>go back</span>
         </Button>
       </nav>
 
