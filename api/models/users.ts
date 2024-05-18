@@ -26,6 +26,20 @@ export async function addUser(
   }
 }
 
+export async function getUserByID(id: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    return user;
+  } catch (error) {
+    console.error("Error fetching user by username:", error);
+    throw new Error("Could not fetch user by username");
+  }
+}
+
 export async function getUserByUsername(username: string) {
   try {
     const user = await prisma.user.findUnique({

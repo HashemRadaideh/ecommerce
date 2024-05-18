@@ -1,14 +1,17 @@
-import { loggingMiddleware, errorMiddleware } from "./middleware";
 import { auth } from "./routes/api/auth";
 import { categories } from "./routes/api/categories";
 import { category } from "./routes/api/category";
 import { product } from "./routes/api/product";
 import { products } from "./routes/api/products";
 import { users } from "./routes/api/users";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import http from "http";
+import morgan from "morgan";
+
+// import { loggingMiddleware, errorMiddleware } from "./middleware";
 
 dotenv.config();
 
@@ -32,7 +35,9 @@ app.use(
 );
 
 // middleware
-app.use(loggingMiddleware, errorMiddleware);
+app.use(cookieParser());
+app.use(morgan("tiny"));
+// app.use(loggingMiddleware, errorMiddleware);
 
 // routes
 app.use(auth);
