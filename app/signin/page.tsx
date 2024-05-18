@@ -47,14 +47,19 @@ export default function Signin() {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post(`${api}/api/auth/login`, values);
+      const response = await axios.post(`${api}/api/auth/login`, values, {
+        withCredentials: true,
+      });
+
       const { token } = response.data;
       localStorage.setItem("token", token);
+
       toast({
         title: "Signed in successfully!",
         description: "Redirecting to home page",
       });
-      router.replace("/");
+
+      router.back();
     } catch (error) {
       toast({
         title: "Could not sign in",

@@ -18,7 +18,7 @@ auth
       }
 
       try {
-        addUser(username, email, password);
+        await addUser(username, email, password);
       } catch (error) {
         console.error("Transaction failed:", error);
         res.status(500).json({ error: "Registration failed" });
@@ -27,14 +27,18 @@ auth
 
       const user = await getUserByEmail(email);
 
-      const token = jwt.sign({ id: user?.id }, process.env.SECRET || "secret", {
-        expiresIn: "30d",
-      });
+      const token = jwt.sign(
+        { id: user?.id, role: user?.role },
+        process.env.SECRET || "secret",
+        {
+          expiresIn: "30d",
+        },
+      );
 
       res.cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         maxAge: 30 * 24 * 60 * 60 * 1000,
       });
 
@@ -63,18 +67,22 @@ auth
         return res.status(401).json({ error: "Invalid email or password" });
       }
 
-      const token = jwt.sign({ id: user?.id }, process.env.SECRET || "secret", {
-        expiresIn: "30d",
-      });
+      const token = jwt.sign(
+        { id: user?.id, role: user?.role },
+        process.env.SECRET || "secret",
+        {
+          expiresIn: "30d",
+        },
+      );
 
       res.cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         maxAge: 30 * 24 * 60 * 60 * 1000,
       });
 
-      res.send(token);
+      res.send({ token });
     } catch (error) {
       console.error("Login failed:", error);
       res.status(500).json({ error: "Login failed" });

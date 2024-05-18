@@ -49,16 +49,20 @@ export default function Signup() {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post(`${api}/api/auth/register`, values);
+      const response = await axios.post(`${api}/api/auth/register`, values, {
+        withCredentials: true,
+      });
+
       const { token } = response.data;
       localStorage.setItem("token", token);
+
       toast({
         title: "Signed up successfully!",
         description: "Redirecting to home page",
       });
-      router.replace("/");
+
+      router.back();
     } catch (error) {
-      console.error("Authentication failed:", error);
       toast({
         title: "Could not sign up",
         description: "Please try again",

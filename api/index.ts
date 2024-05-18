@@ -16,6 +16,7 @@ const app: express.Application = express();
 
 // define api as json
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // static directory
 export const root = "out";
@@ -26,6 +27,7 @@ app.use(
   cors({
     origin: process.env.FRONTEND_DOMAIN || "http://localhost:3000",
     methods: ["GET", "POST", "DELETE", "PUT"],
+    credentials: true,
   }),
 );
 
