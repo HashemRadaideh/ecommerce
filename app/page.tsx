@@ -6,6 +6,7 @@ import axios from "axios";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 import { Navbar } from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
@@ -21,14 +22,38 @@ import {
 import { Input } from "@/components/ui/input";
 import { api, cn } from "@/lib/utils";
 
+interface PaginatedProducts {
+  products: Product[];
+  total: number;
+}
+
 export default function Home() {
+  const [page, setPage] = useState(1);
+  const limit = 10;
+
   const query = useQuery({
-    queryKey: ["home_page"],
-    queryFn: async () =>
-      axios.get<Product[]>(`${api}/products`, {
+    queryKey: ["home_page", page],
+    queryFn: async () => {
+      const { data } = await axios.get<PaginatedProducts>(`${api}/products`, {
+        params: { page, limit },
         withCredentials: true,
-      }),
+      });
+      return data;
+    },
   });
+
+  const totalProducts = query.data?.total || 0;
+  const totalPages = Math.ceil(totalProducts / limit);
+
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    setPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
 
   return (
     <>
@@ -54,7 +79,7 @@ export default function Home() {
                     </Card>
                   </CarouselItem>
                 ))
-              : query.data?.data.slice(0, 5).map((product) => (
+              : query.data?.products.slice(0, 5).map((product) => (
                   <CarouselItem key={product.id}>
                     <Link href={`/product/${product.id}`}>
                       <Card>
@@ -81,14 +106,14 @@ export default function Home() {
 
         <div
           className={cn(
-            "grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols7 grid-rows-3 gap-2 p-2",
+            "grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols7 grid-rows-2 gap-2 p-2",
           )}
         >
           {query.isLoading
-            ? Array.from({ length: 30 }, (_, index) => (
+            ? Array.from({ length: 10 }, (_, index) => (
                 <ProductSkeleton key={index} />
               ))
-            : query.data?.data.map((product) => (
+            : query.data?.products.map((product) => (
                 <Link href={`/product/${product.id}`} key={product.id}>
                   <ProductCard
                     title={product.name}
@@ -100,6 +125,23 @@ export default function Home() {
                   />
                 </Link>
               ))}
+        </div>
+
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={handlePrevPage}
+            disabled={page === 1}
+            className="mr-2 px-4 py-2 border rounded disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <button
+            onClick={handleNextPage}
+            disabled={page >= totalPages}
+            className="px-4 py-2 border rounded disabled:opacity-50"
+          >
+            Next
+          </button>
         </div>
       </main>
     </>

@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { CACHE_EXPIRATION, redis } from "../utils/redis";
+import { PrismaClient, Product } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -40,10 +41,30 @@ export async function getProductById(id: string) {
   }
 }
 
-export async function getProducts() {
+export async function getProducts(skip: number, take: number) {
+  const cacheKey = `products:${skip}:${take}`;
+
   try {
-    const products = await prisma.product.findMany();
-    return products;
+    const cachedData = await redis.get<{ products: Product[]; total: number }>(
+      cacheKey,
+    );
+    if (cachedData) {
+      return cachedData;
+    }
+
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        skip,
+        take,
+      }),
+      prisma.product.count(),
+    ]);
+
+    const result = { products, total };
+
+    await redis.setex(cacheKey, CACHE_EXPIRATION, JSON.stringify(result));
+
+    return result;
   } catch (error) {
     console.error("Error fetching products:", error);
     throw new Error("Could not fetch products");

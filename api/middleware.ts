@@ -66,7 +66,7 @@ export const authMiddleware: express.RequestHandler = async (
 
       if (user) {
         isAuthenticated = true;
-        isAdmin = user.role === Role.ADMIN ? true : false;
+        isAdmin = user.role === Role.ADMIN;
       }
     } catch (error) {
       console.error("Token verification failed:", error);

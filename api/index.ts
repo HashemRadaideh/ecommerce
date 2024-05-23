@@ -24,6 +24,8 @@ app.use(compression());
 export const root = "out";
 app.use(express.static(root));
 
+console.log(`Frontend domain: ${process.env.FRONTEND_DOMAIN}`);
+
 // cors: cross origin resource sharing
 app.use(
   cors({

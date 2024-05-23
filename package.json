@@ -1,6 +1,6 @@
 {
   "name": "ecommerce",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "dev": "concurrently 'next dev' 'nodemon' 'prisma generate --watch' 'prisma studio --browser none' ",
@@ -13,6 +13,7 @@
     "client:start": "NODE_ENV=production next start",
     "db:mysql": "docker run --name mysqldb -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql",
     "db:postgres": "docker run --name postgresdb -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres",
+    "cache": "docker run --name rediscache -d -p 6379:6379 redis --requirepass foobared",
     "prisma": "prisma",
     "studio": "prisma studio",
     "migrate": "prisma migrate dev",
@@ -35,6 +36,7 @@
     "@tanstack/react-table": "^8.16.0",
     "@tauri-apps/api": "^1",
     "@types/uuid": "^9.0.8",
+    "@upstash/redis": "^1.31.2",
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
