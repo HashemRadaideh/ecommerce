@@ -38,7 +38,9 @@ export default function AdminCategories() {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post(`${api}/api/category`, values);
+      await axios.post(`${api}/category`, values, {
+        withCredentials: true,
+      });
       toast({
         title: "Added category successfully",
       });

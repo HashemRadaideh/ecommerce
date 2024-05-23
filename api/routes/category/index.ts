@@ -1,12 +1,13 @@
 import express from "express";
 
+import { authMiddleware } from "@/api/middleware";
 import { addCategory } from "@/api/models/categories";
 
 export const category = express.Router();
 
 category
-  .route("/api/category")
-  .post(async (req: express.Request, res: express.Response) => {
+  .route("/category")
+  .post(authMiddleware, async (req: express.Request, res: express.Response) => {
     try {
       const { name, description } = req.body;
       addCategory(name, description);

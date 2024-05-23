@@ -1,3 +1,5 @@
+"use client";
+
 import { ThemeToggle } from "./ThemeToggle";
 import Link from "next/link";
 

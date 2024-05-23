@@ -6,4 +6,4 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const api =
-  process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:8080";
+  process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:8080/api/v1";

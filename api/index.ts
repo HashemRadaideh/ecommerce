@@ -1,17 +1,16 @@
-import { auth } from "./routes/api/auth";
-import { categories } from "./routes/api/categories";
-import { category } from "./routes/api/category";
-import { product } from "./routes/api/product";
-import { products } from "./routes/api/products";
-import { users } from "./routes/api/users";
+import { authMiddleware } from "./middleware";
+import { auth } from "./routes/auth";
+import { categories } from "./routes/categories";
+import { category } from "./routes/category";
+import { product } from "./routes/product";
+import { products } from "./routes/products";
+import { users } from "./routes/users";
+import compression from "compression";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
-import http from "http";
 import morgan from "morgan";
-
-// import { loggingMiddleware, errorMiddleware } from "./middleware";
 
 dotenv.config();
 
@@ -20,6 +19,7 @@ const app: express.Application = express();
 // define api as json
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(compression());
 
 // static directory
 export const root = "out";
@@ -37,19 +37,11 @@ app.use(
 // middleware
 app.use(cookieParser());
 app.use(morgan("tiny"));
-// app.use(loggingMiddleware, errorMiddleware);
 
 // routes
-app.use(auth);
-app.use(users);
-app.use(category);
-app.use(categories);
-app.use(product);
-app.use(products);
+app.use("/api/v1/", auth, users, category, categories, product, products);
 
-const server = http.createServer(app);
-
-server.listen(process.env.PORT || 8080, () => {
+app.listen(process.env.PORT || 8080, () => {
   console.log(
     `Server is running in ${process.env.NODE_ENV} environment on ` +
       `http://${process.env.HOST || "localhost"}:${process.env.PORT || 8080}`,

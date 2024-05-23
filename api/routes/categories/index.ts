@@ -5,7 +5,7 @@ import { getCategories } from "@/api/models/categories";
 export const categories = express.Router();
 
 categories
-  .route("/api/categories")
+  .route("/categories")
   .get(async (_req: express.Request, res: express.Response) => {
     try {
       const categories = await getCategories();

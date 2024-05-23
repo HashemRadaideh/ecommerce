@@ -1,6 +1,5 @@
 "use client";
 
-import { Skeleton } from "./ui/skeleton";
 import { Product } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -22,13 +21,19 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/lib/utils";
 
 export default function ProductPage({ id }: { id: string }) {
   const query = useQuery({
     queryKey: [id],
-    queryFn: async () => axios.get<Product>(`${api}/api/product?id=${id}`),
+    queryFn: async () =>
+      axios.get<Product>(`${api}/product?id=${id}`, {
+        withCredentials: true,
+      }),
   });
+
+  console.log(`${api}/product?id=${id}`);
 
   return query.isLoading ? (
     <>

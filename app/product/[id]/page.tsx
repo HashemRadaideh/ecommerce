@@ -1,5 +1,6 @@
+import ProductPage from "./ProductPage";
+
 import { Navbar } from "@/components/Navbar";
-import ProductPage from "@/components/ProductPage";
 
 export default function UserId({ params }: { params: { id: string } }) {
   const { id } = params;

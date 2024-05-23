@@ -50,7 +50,7 @@ export default function Signup() {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post(`${api}/api/auth/register`, values, {
+      const response = await axios.post(`${api}/auth/register`, values, {
         withCredentials: true,
       });
 

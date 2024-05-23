@@ -5,7 +5,7 @@ import { getProducts } from "@/api/models/products";
 export const products = express.Router();
 
 products
-  .route("/api/products")
+  .route("/products")
   .get(async (_req: express.Request, res: express.Response) => {
     try {
       const products = await getProducts();

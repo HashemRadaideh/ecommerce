@@ -24,7 +24,10 @@ import { api, cn } from "@/lib/utils";
 export default function Home() {
   const query = useQuery({
     queryKey: ["home_page"],
-    queryFn: async () => axios.get<Product[]>(`${api}/api/products`),
+    queryFn: async () =>
+      axios.get<Product[]>(`${api}/products`, {
+        withCredentials: true,
+      }),
   });
 
   return (
