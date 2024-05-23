@@ -25,7 +25,7 @@ const columns: ColumnDef<User>[] = [
   },
 ];
 
-export default function AdminUsers() {
+export default function AdminUsers({ params }: { params: { id: string } }) {
   const query = useQuery({
     queryKey: ["users"],
     queryFn: async () =>
@@ -36,7 +36,7 @@ export default function AdminUsers() {
 
   return (
     <>
-      <Adminnav />
+      <Adminnav id={params.id} />
 
       <div className={cn("container mx-auto py-10")}>
         {query.data && (

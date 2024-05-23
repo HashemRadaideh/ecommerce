@@ -28,7 +28,7 @@ const formSchema = z.object({
   price: z.number(),
 });
 
-export default function AdminProducts() {
+export default function AdminProducts({ params }: { params: { id: string } }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -61,7 +61,7 @@ export default function AdminProducts() {
 
   return (
     <>
-      <Adminnav />
+      <Adminnav id={params.id} />
 
       <main
         className={cn("flex min-h-screen flex-col items-center justify-center")}

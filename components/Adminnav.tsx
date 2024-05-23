@@ -1,11 +1,9 @@
-"use client";
-
 import { ThemeToggle } from "./ThemeToggle";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 
-export default function Adminnav() {
+export default function Adminnav({ id }: { id: string }) {
   return (
     <nav className={cn("flex justify-between text-xl")}>
       <div className={cn("flex justify-between")}>
@@ -15,23 +13,23 @@ export default function Adminnav() {
           </li>
 
           <li>
-            <Link href="/profile/admin/">Dashboard</Link>
+            <Link href={`/profile/admin/${id}`}>Dashboard</Link>
           </li>
 
           <li>
-            <Link href="/profile/admin/categories/">Categories</Link>
+            <Link href={`/profile/admin/${id}/categories`}>Categories</Link>
           </li>
 
           <li>
-            <Link href="/profile/admin/products">Products</Link>
+            <Link href={`/profile/admin/${id}/products`}>Products</Link>
           </li>
 
           <li>
-            <Link href="/profile/admin/users">Users</Link>
+            <Link href={`/profile/admin/${id}/users`}>Users</Link>
           </li>
 
           <li>
-            <Link href="/profile/admin/orders">Orders</Link>
+            <Link href={`/profile/admin/${id}/orders`}>Orders</Link>
           </li>
         </ul>
       </div>

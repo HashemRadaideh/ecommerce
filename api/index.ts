@@ -1,4 +1,3 @@
-import { authMiddleware } from "./middleware";
 import { auth } from "./routes/auth";
 import { categories } from "./routes/categories";
 import { category } from "./routes/category";

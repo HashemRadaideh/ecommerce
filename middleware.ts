@@ -19,6 +19,7 @@ export async function middleware(req: NextRequest) {
   const token = req.cookies.get("token");
   let isAuthenticated = false;
   let isAdmin = false;
+  let id = "";
 
   if (token) {
     try {
@@ -30,32 +31,36 @@ export async function middleware(req: NextRequest) {
       );
 
       isAuthenticated = true;
-      isAdmin = payload.role === Role.ADMIN ? true : false;
+      isAdmin = payload.role === Role.ADMIN;
+      id = payload.id;
     } catch (error) {
       console.error("Token verification failed:", error);
     }
   }
 
-  // If the user is authenticated and is admin, allow access
-  if (isAuthenticated && isAdmin) {
+  if (isAuthenticated) {
+    // If the user is authenticated and trying to access the profile path, redirect accordingly
+    if (req.nextUrl.pathname.startsWith("/profile")) {
+      if (isAdmin && !req.nextUrl.pathname.startsWith(`/profile/admin/${id}`)) {
+        return NextResponse.redirect(new URL(`/profile/admin/${id}`, req.url));
+      } else if (
+        !isAdmin &&
+        !req.nextUrl.pathname.startsWith(`/profile/user/${id}`)
+      ) {
+        return NextResponse.redirect(new URL(`/profile/user/${id}`, req.url));
+      }
+    }
+
+    // Allow access to other paths if authenticated
     return NextResponse.next();
-  }
-
-  // Check if the requested path is for admin access
-  const isAdminPath = req.nextUrl.pathname.startsWith("/profile");
-
-  // If the user is authenticated and the path is not admin-restricted, allow access
-  if (isAuthenticated && !isAdmin && !isAdminPath) {
-    return NextResponse.next();
-  }
-
-  // If the user is not an admin but is trying to access an admin-restricted path, redirect to the home page
-  if (isAuthenticated && !isAdmin && isAdminPath) {
-    return NextResponse.redirect(new URL("/", req.url));
   }
 
   // If the user is not authenticated and the path is not public, redirect to the signin page
-  return NextResponse.redirect(new URL("/signin", req.url));
+  if (!isAuthenticated && !isPublicPath) {
+    return NextResponse.redirect(new URL("/signin", req.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
