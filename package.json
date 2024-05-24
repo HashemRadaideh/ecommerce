@@ -1,7 +1,11 @@
 {
   "name": "ecommerce",
   "version": "0.1.1",
+  "description": "",
+  "keywords": [],
+  "author": "Hashem Al-Radaideh",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "concurrently 'next dev' 'nodemon' 'prisma generate --watch' 'prisma studio --browser none' ",
     "start": "concurrently 'bun server:start' 'bun client:build && bun client:start'",

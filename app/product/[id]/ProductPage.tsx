@@ -27,10 +27,13 @@ import { api } from "@/lib/utils";
 export default function ProductPage({ id }: { id: string }) {
   const query = useQuery({
     queryKey: [id],
-    queryFn: async () =>
-      axios.get<Product>(`${api}/product?id=${id}`, {
+    queryFn: async () => {
+      const { data } = await axios.get<Product>(`${api}/product?id=${id}`, {
         withCredentials: true,
-      }),
+      });
+
+      return data;
+    },
   });
 
   console.log(`${api}/product?id=${id}`);
@@ -88,13 +91,13 @@ export default function ProductPage({ id }: { id: string }) {
       <Card className="m-10">
         <CardHeader>
           <CardTitle className="text-5xl font-semibold">
-            {query.data?.data.name}
+            {query.data?.name}
           </CardTitle>
-          <CardDescription>{query.data?.data.description}</CardDescription>
+          <CardDescription>{query.data?.description}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col space-y-4">
-          <Image src={""} alt={query.data?.data.name!} />
-          <span className="text-3xl">Price: {query.data?.data.price}$</span>
+          <Image src={""} alt={query.data?.name!} />
+          <span className="text-3xl">Price: {query.data?.price}$</span>
         </CardContent>
         <CardFooter>
           <Button className="w-full">Add to cart</Button>

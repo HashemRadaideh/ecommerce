@@ -26,7 +26,7 @@ export default function ProductCard({
   stock: number;
 }) {
   return (
-    <Card className={cn("hover:outline hover:outline-gray-500")}>
+    <Card className={cn("hover:outline hover:outline-gray-500 w-full h-full")}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

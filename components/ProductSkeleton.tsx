@@ -14,18 +14,18 @@ export default function ProductSkeleton() {
     <Card>
       <CardHeader>
         <CardTitle>
-          <Skeleton className={cn("h-[55px] w-[180px]")} />
+          <Skeleton className={cn("h-[50px] w-[190px]")} />
         </CardTitle>
         <CardDescription>
-          <Skeleton className={cn("h-[35px] w-[160px]")} />
+          <Skeleton className={cn("h-[30px] w-[160px]")} />
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Skeleton className={cn("h-[180px] w-[180px]")} />
       </CardContent>
       <CardFooter className={cn("space-y-1 flex flex-col")}>
-        <Skeleton className={cn("h-[25px] w-[80px]")} />
-        <Skeleton className={cn("h-[25px] w-[80px]")} />
+        <Skeleton className={cn("h-[20px] w-[80px]")} />
+        <Skeleton className={cn("h-[18px] w-[80px]")} />
       </CardFooter>
     </Card>
   );

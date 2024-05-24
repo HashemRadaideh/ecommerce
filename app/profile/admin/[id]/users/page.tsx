@@ -28,10 +28,13 @@ const columns: ColumnDef<User>[] = [
 export default function AdminUsers({ params }: { params: { id: string } }) {
   const query = useQuery({
     queryKey: ["users"],
-    queryFn: async () =>
-      axios.get(`${api}/users`, {
+    queryFn: async () => {
+      const { data } = await axios.get(`${api}/users`, {
         withCredentials: true,
-      }),
+      });
+
+      return data;
+    },
   });
 
   return (
@@ -41,7 +44,7 @@ export default function AdminUsers({ params }: { params: { id: string } }) {
       <div className={cn("container mx-auto py-10")}>
         {query.data && (
           <Card>
-            <DataTable columns={columns} data={query.data.data} />
+            <DataTable columns={columns} data={query.data} />
           </Card>
         )}
       </div>

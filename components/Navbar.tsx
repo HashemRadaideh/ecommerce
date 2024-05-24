@@ -7,7 +7,7 @@ import { ThemeToggle } from "./ThemeToggle";
 
 export const Navbar: React.FC = () => {
   return (
-    <nav className={cn("flex justify-between text-xl")}>
+    <nav className={cn("flex justify-between text-xl w-full h-[30px]")}>
       <Link className={cn("p-4")} href="/">
         Ecommerce
       </Link>

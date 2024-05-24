@@ -10,10 +10,6 @@ export default function Adminnav({ id }: { id: string }) {
       <div className={cn("flex justify-between")}>
         <ul className={cn("flex gap-8 p-4")}>
           <li>
-            <ThemeToggle />
-          </li>
-
-          <li>
             <Link href={`/profile/admin/${id}`}>Dashboard</Link>
           </li>
 
@@ -31,6 +27,10 @@ export default function Adminnav({ id }: { id: string }) {
 
           <li>
             <Link href={`/profile/admin/${id}/orders`}>Orders</Link>
+          </li>
+
+          <li>
+            <ThemeToggle />
           </li>
         </ul>
       </div>

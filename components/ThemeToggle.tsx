@@ -1,9 +1,17 @@
 "use client";
 
-import { Sun, Moon } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useEffect, useState, MouseEvent } from "react";
 
 import { cn } from "@/lib/utils";
+
+const Sun = dynamic(() => import("lucide-react").then((mod) => mod.Sun), {
+  ssr: false,
+});
+
+const Moon = dynamic(() => import("lucide-react").then((mod) => mod.Moon), {
+  ssr: false,
+});
 
 export const ThemeToggle: React.FC = () => {
   const [theme, setTheme] = useState<"dark" | "light">(() => {
@@ -26,7 +34,7 @@ export const ThemeToggle: React.FC = () => {
       className={cn("ml-0")}
       onClick={(event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        setTheme(theme == "dark" ? "light" : "dark");
+        setTheme(theme === "dark" ? "light" : "dark");
       }}
     >
       {theme === "dark" ? <Sun /> : <Moon />}
