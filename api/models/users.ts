@@ -1,6 +1,7 @@
-import { CACHE_EXPIRATION, redis } from "../utils/redis";
 import { PrismaClient, User } from "@prisma/client";
 import bcrypt from "bcrypt";
+
+import { CACHE_EXPIRATION, redis } from "../utils/redis";
 
 const prisma = new PrismaClient();
 

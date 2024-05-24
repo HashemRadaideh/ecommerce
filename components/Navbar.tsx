@@ -1,8 +1,9 @@
-import { ThemeToggle } from "./ThemeToggle";
 import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
+
+import { ThemeToggle } from "./ThemeToggle";
 
 export const Navbar: React.FC = () => {
   return (

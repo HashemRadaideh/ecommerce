@@ -1,7 +1,8 @@
-import { getUserByID } from "./models/users";
 import { Role } from "@prisma/client";
 import express from "express";
 import jwt from "jsonwebtoken";
+
+import { getUserByID } from "./models/users";
 
 export const loggingMiddleware = (
   req: express.Request,
@@ -33,14 +34,6 @@ export const authMiddleware: express.RequestHandler = async (
   res: express.Response,
   next: express.NextFunction,
 ) => {
-  if (
-    process.env.NODE_ENV !== "production" &&
-    (req.ip === "localhost" || req.ip === "127.0.0.1" || req.ip === "[::1]")
-  ) {
-    console.log("executing");
-    next();
-  }
-
   const isPublicPath = publicPaths.includes(req.url);
 
   // Allow access to public paths

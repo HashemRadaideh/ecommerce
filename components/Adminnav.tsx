@@ -1,7 +1,8 @@
-import { ThemeToggle } from "./ThemeToggle";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
+
+import { ThemeToggle } from "./ThemeToggle";
 
 export default function Adminnav({ id }: { id: string }) {
   return (
