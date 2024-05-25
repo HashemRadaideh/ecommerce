@@ -50,7 +50,7 @@ export default function Signup() {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post(`${api}/auth/register`, values, {
+      const response = await axios.post(`${api}/auth`, values, {
         withCredentials: true,
       });
 
@@ -62,7 +62,7 @@ export default function Signup() {
         description: "Redirecting to home page",
       });
 
-      router.back();
+      router.push("/");
     } catch (error) {
       toast({
         title: "Could not sign up",

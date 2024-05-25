@@ -12,6 +12,18 @@ products.route("/products").get(async (req: Request, res: Response) => {
   try {
     const { products, total } = await getProducts(skip, take);
     res.json({ products, total });
+
+    // res.setHeader("Content-Type", "application/json");
+    // res.setHeader("Transfer-Encoding", "chunked");
+
+    // res.write('{"products":[');
+
+    // for (const product of products) {
+    //   res.write(JSON.stringify(product) + ",");
+    // }
+
+    // res.write(`],"total":${total}}`);
+    // res.end();
   } catch (error) {
     console.error("Failed to get all products", error);
     res.status(500).json({ error: "Failed to get all products" });

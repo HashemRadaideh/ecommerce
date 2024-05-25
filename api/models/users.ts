@@ -29,7 +29,7 @@ export async function addUser(
 }
 
 export async function getUserByID(id: string) {
-  const cacheKey = `userById:${id}`;
+  const cacheKey = `id:${id}`;
 
   try {
     const cachedData = await redis.get<User>(cacheKey);
@@ -43,7 +43,7 @@ export async function getUserByID(id: string) {
       },
     });
 
-    await redis.setex(cacheKey, CACHE_EXPIRATION, JSON.stringify(user));
+    await redis.setex(cacheKey, CACHE_EXPIRATION, user);
 
     return user;
   } catch (error) {
@@ -53,7 +53,7 @@ export async function getUserByID(id: string) {
 }
 
 export async function getUserByUsername(username: string) {
-  const cacheKey = `userByUsername:${username}`;
+  const cacheKey = `username:${username}`;
 
   try {
     const cachedData = await redis.get<User>(cacheKey);
@@ -67,7 +67,7 @@ export async function getUserByUsername(username: string) {
       },
     });
 
-    await redis.setex(cacheKey, CACHE_EXPIRATION, JSON.stringify(user));
+    await redis.setex(cacheKey, CACHE_EXPIRATION, user);
 
     return user;
   } catch (error) {
@@ -77,7 +77,7 @@ export async function getUserByUsername(username: string) {
 }
 
 export async function getUserByEmail(email: string) {
-  const cacheKey = `userByEmail:${email}`;
+  const cacheKey = `email:${email}`;
 
   try {
     const cachedData = await redis.get<User>(cacheKey);
@@ -91,7 +91,7 @@ export async function getUserByEmail(email: string) {
       },
     });
 
-    await redis.setex(cacheKey, CACHE_EXPIRATION, JSON.stringify(user));
+    await redis.setex(cacheKey, CACHE_EXPIRATION, user);
 
     return user;
   } catch (error) {
@@ -111,7 +111,7 @@ export async function getUsers() {
 
     const users = await prisma.user.findMany();
 
-    await redis.setex(cacheKey, CACHE_EXPIRATION, JSON.stringify(users));
+    await redis.setex(cacheKey, CACHE_EXPIRATION, users);
 
     return users;
   } catch (error) {

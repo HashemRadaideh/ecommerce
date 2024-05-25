@@ -20,7 +20,7 @@ export async function addCategory(name: string, description: string) {
 }
 
 export async function getCategoryByName(name: string) {
-  const cacheKey = `categoryByName:${name}`;
+  const cacheKey = `category:${name}`;
 
   try {
     const cachedData = await redis.get<Category>(cacheKey);
@@ -34,7 +34,7 @@ export async function getCategoryByName(name: string) {
       },
     });
 
-    await redis.setex(cacheKey, CACHE_EXPIRATION, JSON.stringify(category));
+    await redis.setex(cacheKey, CACHE_EXPIRATION, category);
 
     return category;
   } catch (error) {
@@ -54,7 +54,7 @@ export async function getCategories() {
 
     const categories = await prisma.category.findMany();
 
-    await redis.setex(cacheKey, CACHE_EXPIRATION, JSON.stringify(categories));
+    await redis.setex(cacheKey, CACHE_EXPIRATION, categories);
 
     return categories;
   } catch (error) {

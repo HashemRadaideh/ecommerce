@@ -60,7 +60,7 @@ export default function Signin() {
         description: "Redirecting to home page",
       });
 
-      router.back();
+      router.push("/");
     } catch (error) {
       toast({
         title: "Could not sign in",

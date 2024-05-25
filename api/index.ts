@@ -38,7 +38,7 @@ api.use(
 api.use(cookieParser());
 api.use(
   morgan(
-    '[:date[web]] :remote-addr :referrer ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms',
+    '[:date[web]] :referrer ":method :url HTTP/:http-version" :status :response-time ms',
   ),
 );
 

@@ -29,12 +29,22 @@ export async function addProduct(
 }
 
 export async function getProductById(id: string) {
+  const cacheKey = `id:${id}`;
+
   try {
+    const cachedData = await redis.get<Product>(cacheKey);
+    if (cachedData) {
+      return cachedData;
+    }
+
     const product = await prisma.product.findUnique({
       where: {
         id,
       },
     });
+
+    await redis.setex(cacheKey, CACHE_EXPIRATION, product);
+
     return product;
   } catch (error) {
     console.error("Error fetching product by ID:", error);
@@ -42,13 +52,16 @@ export async function getProductById(id: string) {
   }
 }
 
+interface ProductPage {
+  products: Product[];
+  total: number;
+}
+
 export async function getProducts(skip: number, take: number) {
   const cacheKey = `products:${skip}:${take}`;
 
   try {
-    const cachedData = await redis.get<{ products: Product[]; total: number }>(
-      cacheKey,
-    );
+    const cachedData = await redis.get<ProductPage>(cacheKey);
     if (cachedData) {
       return cachedData;
     }
@@ -61,9 +74,9 @@ export async function getProducts(skip: number, take: number) {
       prisma.product.count(),
     ]);
 
-    const result = { products, total };
+    const result: ProductPage = { products, total };
 
-    await redis.setex(cacheKey, CACHE_EXPIRATION, JSON.stringify(result));
+    await redis.setex(cacheKey, CACHE_EXPIRATION, result);
 
     return result;
   } catch (error) {
