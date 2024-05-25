@@ -100,7 +100,7 @@ export default function AdminCategories({
             />
 
             <Button type="submit" className={cn("w-full")}>
-              Add product
+              Add category
             </Button>
           </form>
         </Form>
