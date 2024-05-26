@@ -30,7 +30,9 @@ export default function AdminUsers({ params }: { params: { id: string } }) {
     queryKey: ["users"],
     queryFn: async () => {
       const { data } = await axios.get(`${api}/users`, {
-        withCredentials: true,
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
 
       return data;

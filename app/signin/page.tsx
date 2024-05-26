@@ -49,11 +49,14 @@ export default function Signin() {
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const response = await axios.put(`${api}/auth`, values, {
-        withCredentials: true,
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
 
       const { token } = response.data;
       localStorage.setItem("token", token);
+      document.cookie = `token=${token}; path=/; max-age=3600;`;
 
       toast({
         title: "Signed in successfully!",

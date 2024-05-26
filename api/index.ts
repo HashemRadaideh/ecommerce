@@ -1,5 +1,4 @@
 import compression from "compression";
-import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
@@ -35,7 +34,6 @@ api.use(
 );
 
 // middleware
-api.use(cookieParser());
 api.use(
   morgan(
     '[:date[web]] :referrer ":method :url HTTP/:http-version" :status :response-time ms',

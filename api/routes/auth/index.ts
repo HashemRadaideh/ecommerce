@@ -35,12 +35,6 @@ auth.route("/auth").post(async (req: Request, res: Response) => {
       },
     );
 
-    res.cookie("token", token, {
-      secure: true,
-      sameSite: "none",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-    });
-
     res.status(200).send({ token });
   } catch (error) {
     console.error("Registration failed:", error);
@@ -71,12 +65,6 @@ auth.route("/auth").put(async (req: Request, res: Response) => {
         expiresIn: "30d",
       },
     );
-
-    res.cookie("token", token, {
-      secure: true,
-      sameSite: "none",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-    });
 
     res.send({ token });
   } catch (error) {

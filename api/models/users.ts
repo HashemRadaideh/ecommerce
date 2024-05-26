@@ -1,4 +1,4 @@
-import { PrismaClient, User } from "@prisma/client";
+import { PrismaClient, Role, User } from "@prisma/client";
 import bcrypt from "bcrypt";
 
 import { CACHE_EXPIRATION, redis } from "../utils/redis";
@@ -9,6 +9,7 @@ export async function addUser(
   username: string,
   email: string,
   password: string,
+  role?: string,
 ) {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
@@ -19,6 +20,7 @@ export async function addUser(
         username,
         email,
         password: hashedPassword,
+        role: role === "Admin" ? Role.ADMIN : Role.USER,
       },
     });
     return user;

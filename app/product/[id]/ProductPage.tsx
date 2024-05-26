@@ -29,7 +29,9 @@ export default function ProductPage({ id }: { id: string }) {
     queryKey: [id],
     queryFn: async () => {
       const { data } = await axios.get<Product>(`${api}/product?id=${id}`, {
-        withCredentials: true,
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
 
       return data;

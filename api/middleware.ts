@@ -42,7 +42,7 @@ export const authMiddleware: express.RequestHandler = async (
     return;
   }
 
-  const token = req.cookies.token;
+  const token = req.header("authorization")?.replace("Bearer ", "") || "";
   let isAuthenticated = false;
   let isAdmin = false;
 
