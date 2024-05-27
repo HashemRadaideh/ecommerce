@@ -11,7 +11,7 @@ users
   .get(authMiddleware, async (_req: Request, res: Response) => {
     try {
       const users = await getUsers();
-      res.json(users);
+      res.status(200).json(users);
     } catch (error) {
       console.error("Registration failed:", error);
       res.status(500).json({ error: "Registration failed" });

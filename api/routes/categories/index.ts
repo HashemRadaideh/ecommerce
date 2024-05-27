@@ -8,7 +8,7 @@ export const categories = express.Router();
 categories.route("/categories").get(async (_req: Request, res: Response) => {
   try {
     const categories = await getCategories();
-    res.json(categories);
+    res.status(200).json(categories);
   } catch (error) {
     console.error("Failed to get all categories", error);
     res.status(500).json({ error: "Failed to get all categories" });

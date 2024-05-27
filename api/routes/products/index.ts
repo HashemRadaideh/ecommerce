@@ -11,7 +11,7 @@ products.route("/products").get(async (req: Request, res: Response) => {
 
   try {
     const { products, total } = await getProducts(skip, take);
-    res.json({ products, total });
+    res.status(200).json({ products, total });
 
     // res.setHeader("Content-Type", "application/json");
     // res.setHeader("Transfer-Encoding", "chunked");

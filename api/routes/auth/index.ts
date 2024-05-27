@@ -66,7 +66,7 @@ auth.route("/auth").put(async (req: Request, res: Response) => {
       },
     );
 
-    res.send({ token });
+    res.status(200).send({ token });
   } catch (error) {
     console.error("Login failed:", error);
     res.status(500).json({ error: "Login failed" });

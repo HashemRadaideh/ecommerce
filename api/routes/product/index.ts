@@ -11,7 +11,7 @@ product.route("/product").get(async (req: Request, res: Response) => {
   try {
     const { id } = req.query;
     const products = await getProductById(id as string);
-    res.json(products);
+    res.status(200).json(products);
   } catch (error) {
     console.error("Failed to get all products", error);
     res.status(500).json({ error: "Failed to get all products" });
@@ -29,6 +29,7 @@ product
         return;
       }
       addProduct(name, description, price, stock_quantity, cat.id);
+      res.status(200);
     } catch (error) {
       console.error("Adding product failed", error);
       res.status(500).json({ error: "Adding product failed" });
