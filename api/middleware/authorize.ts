@@ -2,34 +2,12 @@ import { Role } from "@prisma/client";
 import express from "express";
 import jwt from "jsonwebtoken";
 
-import { getUserByID } from "./models/users";
-
-export const loggingMiddleware = (
-  req: express.Request,
-  _res: express.Response,
-  next: express.NextFunction,
-) => {
-  console.log(
-    `[${new Date().toISOString()}] [INFO] ` +
-      `${req.ip} ${req.method} ${req.originalUrl}`,
-  );
-  next();
-};
-
-export const errorMiddleware: express.ErrorRequestHandler = (
-  err: any,
-  _req: express.Request,
-  res: express.Response,
-  _next: express.NextFunction,
-) => {
-  console.error(err.stack);
-  res.status(500).send("Something broke!");
-};
+import { getUserByID } from "@/api/models/user";
 
 const publicPaths = ["/", "/signin", "/signup", "/product"];
 const adminPaths = ["/", "/signin", "/signup", "/product"];
 
-export const authMiddleware: express.RequestHandler = async (
+export const authorize: express.RequestHandler = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction,

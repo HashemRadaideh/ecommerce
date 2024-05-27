@@ -1,14 +1,14 @@
 import express from "express";
 import type { Request, Response } from "express";
 
-import { authMiddleware } from "@/api/middleware";
-import { addCategory } from "@/api/models/categories";
+import { authorize } from "@/api/middleware/authorize";
+import { addCategory, getCategories } from "@/api/models/category";
 
 export const category = express.Router();
 
 category
   .route("/category")
-  .post(authMiddleware, async (req: Request, res: Response) => {
+  .post(authorize, async (req: Request, res: Response) => {
     try {
       const { name, description } = req.body;
       addCategory(name, description);
@@ -18,3 +18,13 @@ category
       res.status(500).json({ error: "Adding category failed" });
     }
   });
+
+category.route("/categories").get(async (_req: Request, res: Response) => {
+  try {
+    const categories = await getCategories();
+    res.status(200).json(categories);
+  } catch (error) {
+    console.error("Failed to get all categories", error);
+    res.status(500).json({ error: "Failed to get all categories" });
+  }
+});

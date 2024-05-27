@@ -3,8 +3,8 @@ import express from "express";
 import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
-import { authMiddleware } from "@/api/middleware";
-import { addUser, getUserByEmail } from "@/api/models/users";
+import { authorize } from "@/api/middleware/authorize";
+import { addUser, getUserByEmail } from "@/api/models/user";
 
 export const auth = express.Router();
 
@@ -73,14 +73,12 @@ auth.route("/auth").put(async (req: Request, res: Response) => {
   }
 });
 
-auth
-  .route("/auth")
-  .delete(authMiddleware, async (_req: Request, res: Response) => {
-    try {
-      res.clearCookie("token");
-      res.status(200).json({ message: "User unregistered successfully" });
-    } catch (error) {
-      console.error("Unregister failed:", error);
-      res.status(500).json({ error: "Unregister failed" });
-    }
-  });
+auth.route("/auth").delete(authorize, async (_req: Request, res: Response) => {
+  try {
+    res.clearCookie("token");
+    res.status(200).json({ message: "User unregistered successfully" });
+  } catch (error) {
+    console.error("Unregister failed:", error);
+    res.status(500).json({ error: "Unregister failed" });
+  }
+});

@@ -1,6 +1,6 @@
-import { PrismaClient, Product } from "@prisma/client";
+import { Prisma, PrismaClient, Product } from "@prisma/client";
 
-import { CACHE_EXPIRATION, redis } from "../utils/redis";
+import { CACHE_EXPIRATION, redis } from "@/api/utils/redis";
 
 const prisma = new PrismaClient();
 
@@ -29,7 +29,7 @@ export async function addProduct(
 }
 
 export async function getProductById(id: string) {
-  const cacheKey = `id:${id}`;
+  const cacheKey = `${id}`;
 
   try {
     const cachedData = await redis.get<Product>(cacheKey);

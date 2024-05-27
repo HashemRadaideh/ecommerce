@@ -5,10 +5,8 @@ import express from "express";
 import morgan from "morgan";
 
 import { auth } from "./routes/auth";
-import { categories } from "./routes/categories";
 import { category } from "./routes/category";
 import { product } from "./routes/product";
-import { products } from "./routes/products";
 import { users } from "./routes/users";
 
 dotenv.config();
@@ -41,7 +39,7 @@ api.use(
 );
 
 // routes
-api.use("/api/v1", auth, users, category, categories, product, products);
+api.use("/api/v1", auth, users, category, product);
 
 api.listen(process.env.PORT || 8080, () => {
   console.log(

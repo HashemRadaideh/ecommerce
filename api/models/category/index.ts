@@ -1,6 +1,6 @@
 import { Category, PrismaClient } from "@prisma/client";
 
-import { CACHE_EXPIRATION, redis } from "../utils/redis";
+import { CACHE_EXPIRATION, redis } from "@/api/utils/redis";
 
 const prisma = new PrismaClient();
 

@@ -1,7 +1,7 @@
 import { PrismaClient, Role, User } from "@prisma/client";
 import bcrypt from "bcrypt";
 
-import { CACHE_EXPIRATION, redis } from "../utils/redis";
+import { CACHE_EXPIRATION, redis } from "@/api/utils/redis";
 
 const prisma = new PrismaClient();
 
@@ -31,7 +31,7 @@ export async function addUser(
 }
 
 export async function getUserByID(id: string) {
-  const cacheKey = `id:${id}`;
+  const cacheKey = `${id}`;
 
   try {
     const cachedData = await redis.get<User>(cacheKey);
