@@ -19,14 +19,14 @@ export const Navbar: React.FC = () => {
           </li>
 
           <li>
-            <Link href="/cart">
+            <a href="/cart">
               <ShoppingCart />
               <span className={cn("sr-only")}>cart</span>
-            </Link>
+            </a>
           </li>
 
           <li>
-            <Link href="/profile">profile</Link>
+            <a href="/profile">profile</a>
           </li>
         </ul>
       </div>

@@ -63,7 +63,7 @@ export default function Signin() {
         description: "Redirecting to home page",
       });
 
-      router.push("/");
+      router.back();
     } catch (error) {
       toast({
         title: "Could not sign in",
@@ -149,7 +149,11 @@ export default function Signin() {
           <CardFooter className={cn("text-sm items-center justify-center")}>
             <span>
               Create an account for free!{" "}
-              <Link href="/signup" className={cn("text-sky-500 underline")}>
+              <Link
+                href="/signup"
+                className={cn("text-sky-500 underline")}
+                replace
+              >
                 Sign up
               </Link>
             </span>

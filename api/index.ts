@@ -43,9 +43,9 @@ api.use(
 // routes
 api.use("/api/v1", auth, users, category, categories, product, products);
 
-api.listen(process.env.EXPRESS_PORT || 8080, () => {
+api.listen(process.env.PORT || 8080, () => {
   console.log(
     `Server is running in ${process.env.NODE_ENV} environment on ` +
-      `http://localhost:${process.env.EXPRESS_PORT || 8080}`,
+      `http://localhost:${process.env.PORT || 8080}`,
   );
 });
