@@ -17,6 +17,7 @@ export default function ProductCard({
   imageAlt,
   price,
   stock,
+  className,
 }: {
   title: string;
   description: string;
@@ -24,9 +25,14 @@ export default function ProductCard({
   imageAlt: string;
   price: number;
   stock: number;
+  className?: string;
 }) {
   return (
-    <Card className={cn("hover:outline hover:outline-gray-500 w-full h-full")}>
+    <Card
+      className={cn(
+        `hover:outline hover:outline-gray-500 w-full h-full ${className}`,
+      )}
+    >
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

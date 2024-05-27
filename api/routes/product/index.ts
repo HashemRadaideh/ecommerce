@@ -3,6 +3,7 @@ import type { Request, Response } from "express";
 
 import { authorize } from "@/api/middleware/authorize";
 import { getCategoryByName } from "@/api/models/category";
+import { getLatestProducts } from "@/api/models/product";
 import { addProduct, getProductById, getProducts } from "@/api/models/product";
 
 export const product = express.Router();
@@ -39,9 +40,10 @@ product
 product.route("/products").get(async (req: Request, res: Response) => {
   const skip = parseInt(req.query.skip as string, 10) || 0;
   const take = parseInt(req.query.take as string, 10) || 10;
+  const search = (req.query.take as string) || "";
 
   try {
-    const { products, total } = await getProducts(skip, take);
+    const { products, total } = await getProducts(skip, take, search);
     res.status(200).json({ products, total });
 
     // res.setHeader("Content-Type", "application/json");
@@ -55,6 +57,16 @@ product.route("/products").get(async (req: Request, res: Response) => {
 
     // res.write(`],"total":${total}}`);
     // res.end();
+  } catch (error) {
+    console.error("Failed to get all products", error);
+    res.status(500).json({ error: "Failed to get all products" });
+  }
+});
+
+product.route("/products/latest").get(async (_req: Request, res: Response) => {
+  try {
+    const products = await getLatestProducts();
+    res.status(200).json(products);
   } catch (error) {
     console.error("Failed to get all products", error);
     res.status(500).json({ error: "Failed to get all products" });
