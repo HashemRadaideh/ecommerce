@@ -1,3 +1,6 @@
+"use client";
+
+import { LogOut } from "lucide-react";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
@@ -27,6 +30,20 @@ export default function Adminnav({ id }: { id: string }) {
 
           <li>
             <Link href={`/profile/admin/${id}/orders`}>Orders</Link>
+          </li>
+
+          <li>
+            <button
+              onClick={() => {
+                localStorage.removeItem("token");
+                document.cookie =
+                  "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                window.location.reload();
+              }}
+            >
+              <LogOut />
+              <span className={cn("sr-only")}>log out</span>
+            </button>
           </li>
 
           <li>
