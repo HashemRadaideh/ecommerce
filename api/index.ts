@@ -6,6 +6,7 @@ import morgan from "morgan";
 
 import { auth } from "./routes/auth";
 import { category } from "./routes/category";
+import { orders } from "./routes/orders";
 import { product } from "./routes/product";
 import { search } from "./routes/search";
 import { users } from "./routes/users";
@@ -40,7 +41,7 @@ api.use(
 );
 
 // routes
-api.use("/api/v1", auth, users, category, product, search);
+api.use("/api/v1", auth, users, category, product, search, orders);
 
 api.listen(process.env.PORT || 8080, () => {
   console.log(

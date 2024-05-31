@@ -17,6 +17,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Cart      Cart[]
+  Order     Order[]
 }
 
 model Category {
@@ -39,6 +40,7 @@ model Product {
   updatedAt     DateTime @updatedAt
   carts         Cart[]
   category      Category @relation(fields: [categoryId], references: [id], map: "Product_categoryId_fkey_unique")
+  Order         Order[]
 
   @@index([categoryId], map: "Product_categoryId_fkey")
 }
@@ -55,6 +57,20 @@ model Cart {
 
   @@index([productId], map: "Cart_productId_fkey")
   @@index([userId], map: "Cart_userId_fkey")
+}
+
+model Order {
+  id        String   @id @default(uuid())
+  userId    String
+  productId String
+  quantity  Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id], map: "Order_productId_fkey_unique")
+  user      User     @relation(fields: [userId], references: [id], map: "Order_userId_fkey_unique")
+
+  @@index([productId], map: "Order_productId_fkey")
+  @@index([userId], map: "Order_userId_fkey")
 }
 
 enum Role {
