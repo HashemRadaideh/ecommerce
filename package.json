@@ -27,7 +27,8 @@
     "tauri": "tauri",
     "prettier": "prettier . --write --log-level warn",
     "lint": "next lint",
-    "check": "bun prettier && bun lint"
+    "check": "bun prettier && bun lint",
+    "ssl": "mkdir -p cert && openssl req -new -nodes -days 365 -sha256 -x509 -newkey rsa:2048 -keyout cert/server.key -out cert/server.pem"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",

@@ -7,6 +7,7 @@ import morgan from "morgan";
 import { auth } from "./routes/auth";
 import { category } from "./routes/category";
 import { product } from "./routes/product";
+import { search } from "./routes/search";
 import { users } from "./routes/users";
 
 dotenv.config();
@@ -34,12 +35,12 @@ api.use(
 // middleware
 api.use(
   morgan(
-    '[:date[web]] :referrer ":method :url HTTP/:http-version" :status :response-time ms',
+    '[:date[web]] ":method :url HTTP/:http-version" :status :response-time ms',
   ),
 );
 
 // routes
-api.use("/api/v1", auth, users, category, product);
+api.use("/api/v1", auth, users, category, product, search);
 
 api.listen(process.env.PORT || 8080, () => {
   console.log(

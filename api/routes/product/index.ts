@@ -21,7 +21,7 @@ product.route("/product").get(async (req: Request, res: Response) => {
 
 product
   .route("/product")
-  .post(authorize, async (req: express.Request, res: express.Response) => {
+  .post(authorize, async (req: Request, res: Response) => {
     try {
       const { name, description, category, price, stock_quantity } = req.body;
       const cat = await getCategoryByName(category);

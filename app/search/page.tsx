@@ -3,14 +3,16 @@
 import { Product } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { useState } from "react";
 
 import { Navbar } from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import ProductSkeleton from "@/components/ProductSkeleton";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { api, cn } from "@/lib/utils";
 
 interface PaginatedProducts {
@@ -19,18 +21,22 @@ interface PaginatedProducts {
 }
 
 export default function Search() {
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState(searchParams?.get("q") || "");
   const [skip, setSkip] = useState(0);
   const take = 10;
 
   const query = useQuery({
-    queryKey: ["search", skip],
+    queryKey: [search, skip],
     queryFn: async () => {
-      const { data } = await axios.get<PaginatedProducts>(`${api}/products`, {
-        params: { skip, take },
+      const { data } = await axios.get<PaginatedProducts>(`${api}/search`, {
+        params: { skip, take, search },
         withCredentials: true,
       });
+      console.log(data);
       return data;
     },
+    enabled: !!search,
   });
 
   const totalProducts = query.data?.total || 0;
@@ -50,26 +56,24 @@ export default function Search() {
     <>
       <Navbar />
 
-      <main className={cn("flex flex-col items-center")}>
-        <div className={cn("flex")}>
-          <Input placeholder="Search" className={cn("w-4/6 m-5 border-2")} />
-
-          <div className="flex justify-center mt-4">
-            <button
-              onClick={handlePrevPage}
-              disabled={!skip}
-              className="mr-2 px-4 py-2 border rounded disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <button
-              onClick={handleNextPage}
-              disabled={skip >= totalPages}
-              className="px-4 py-2 border rounded disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div>
+      <main className={cn("flex flex-col justify-start items-center")}>
+        <div className="flex justify-center mt-4">
+          <Button
+            onClick={handlePrevPage}
+            disabled={!skip}
+            className="mr-2 px-4 py-2 border rounded disabled:opacity-50"
+          >
+            <ArrowLeft />
+            <span className={cn("sr-only")}>Previous</span>
+          </Button>
+          <Button
+            onClick={handleNextPage}
+            disabled={skip >= totalPages}
+            className="px-4 py-2 border rounded disabled:opacity-50"
+          >
+            <ArrowRight />
+            <span className={cn("sr-only")}>Next</span>
+          </Button>
         </div>
 
         <div

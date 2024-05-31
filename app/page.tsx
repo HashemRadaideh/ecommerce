@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 import { Navbar } from "@/components/Navbar";
-import Searchbar from "@/components/Searchbar";
 import { api, cn } from "@/lib/utils";
 
 import CategoryProducts from "./(home)/CategoryProducts";
@@ -27,8 +26,6 @@ export default function Home() {
       <Navbar />
 
       <main className={cn("flex flex-col items-center")}>
-        <Searchbar />
-
         <Latests />
 
         {query.data?.map((category, index) => (

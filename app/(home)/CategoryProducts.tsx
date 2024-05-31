@@ -3,12 +3,14 @@
 import { Category, Product } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { useState } from "react";
 
 import ProductCard from "@/components/ProductCard";
 import ProductSkeleton from "@/components/ProductSkeleton";
+import { Button } from "@/components/ui/button";
 import { api, cn } from "@/lib/utils";
 
 interface PaginatedProducts {
@@ -52,21 +54,23 @@ export default function CategoryProducts({ category }: { category: Category }) {
           <span className={cn("block text-sm")}>{category.description}</span>
         </div>
 
-        <div className={cn("mt-4")}>
-          <button
+        <div className="flex justify-center mt-4">
+          <Button
             onClick={handlePrevPage}
             disabled={!skip}
-            className={cn("mr-2 px-4 py-2 border rounded disabled:opacity-50")}
+            className="mr-2 px-4 py-2 border rounded disabled:opacity-50"
           >
-            Previous
-          </button>
-          <button
+            <ArrowLeft />
+            <span className={cn("sr-only")}>Previous</span>
+          </Button>
+          <Button
             onClick={handleNextPage}
             disabled={skip >= totalPages}
-            className={cn("px-4 py-2 border rounded disabled:opacity-50")}
+            className="px-4 py-2 border rounded disabled:opacity-50"
           >
-            Next
-          </button>
+            <ArrowRight />
+            <span className={cn("sr-only")}>Next</span>
+          </Button>
         </div>
       </div>
 
