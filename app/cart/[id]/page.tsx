@@ -79,7 +79,7 @@ export default function UserId({ params }: { params: { id: string } }) {
               );
             }}
           >
-            Add to cart
+            Confirm order
           </Button>
             <DataTable columns={columns} data={query.data} />
           </Card>
