@@ -4,7 +4,7 @@ import multer from "multer";
 
 import { authorize } from "@/api/middleware/authorize";
 import { getCategoryByName } from "@/api/models/category";
-import { getLatestProducts } from "@/api/models/product";
+import { getLatestProducts, saveProductImages } from "@/api/models/product";
 import { addProduct, getProductById, getProducts } from "@/api/models/product";
 
 const storage = multer.memoryStorage();
@@ -32,11 +32,11 @@ export const product = express.Router();
 product.route("/product").get(async (req: Request, res: Response) => {
   try {
     const { id } = req.query;
-    const products = await getProductById(id as string);
-    res.status(200).json(products);
+    const product = await getProductById(id as string);
+    res.status(200).json(product);
   } catch (error) {
-    console.error("Failed to get all products", error);
-    res.status(500).json({ error: "Failed to get all products" });
+    console.error("Failed to get the product", error);
+    res.status(500).json({ error: "Failed to get the product" });
   }
 });
 
@@ -49,12 +49,25 @@ product
       try {
         const { name, description, category, price, stock_quantity } = req.body;
         const images = req.files as Express.Multer.File[];
+
         const cat = await getCategoryByName(category);
         if (!cat) {
           res.status(404).json({ error: "Category not found" });
           return;
         }
-        addProduct(name, description, price, stock_quantity, cat.id);
+
+        const product = await addProduct(
+          name,
+          description,
+          parseInt(price, 10),
+          parseInt(stock_quantity, 10),
+          cat.id,
+        );
+
+        if (images && images.length > 0) {
+          await saveProductImages(product.id, images);
+        }
+
         res.status(200).json({ message: "Successfully added product" });
       } catch (error) {
         console.error("Adding product failed", error);
@@ -72,8 +85,8 @@ product.route("/products").get(async (req: Request, res: Response) => {
     const { products, total } = await getProducts(skip, take, search);
     res.status(200).json({ products, total });
   } catch (error) {
-    console.error("Failed to get all products", error);
-    res.status(500).json({ error: "Failed to get all products" });
+    console.error("Failed to get products", error);
+    res.status(500).json({ error: "Failed to get products" });
   }
 });
 
@@ -82,7 +95,7 @@ product.route("/products/latest").get(async (_req: Request, res: Response) => {
     const products = await getLatestProducts();
     res.status(200).json(products);
   } catch (error) {
-    console.error("Failed to get all products", error);
-    res.status(500).json({ error: "Failed to get all products" });
+    console.error("Failed to get latest products", error);
+    res.status(500).json({ error: "Failed to get latest products" });
   }
 });

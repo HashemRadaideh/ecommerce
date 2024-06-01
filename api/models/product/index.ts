@@ -1,7 +1,5 @@
 import { Prisma, PrismaClient, Product } from "@prisma/client";
 
-import { CACHE_EXPIRATION, redis } from "@/api/utils/redis";
-
 const prisma = new PrismaClient();
 
 export async function addProduct(
@@ -28,23 +26,35 @@ export async function addProduct(
   }
 }
 
-export async function getProductById(id: string) {
-  const cacheKey = `${id}`;
-
+export async function saveProductImages(
+  productId: string,
+  images: Express.Multer.File[],
+) {
   try {
-    const cachedData = await redis.get<Product>(cacheKey);
-    if (cachedData) {
-      return cachedData;
-    }
-
-    const product = await prisma.product.findUnique({
-      where: {
-        id,
-      },
+    const imagePromises = images.map((image) => {
+      return prisma.image.create({
+        data: {
+          fileName: image.originalname,
+          fileType: image.mimetype,
+          data: image.buffer,
+          productId,
+        },
+      });
     });
 
-    await redis.setex(cacheKey, CACHE_EXPIRATION, product);
+    await Promise.all(imagePromises);
+  } catch (error) {
+    console.error("Error saving product images:", error);
+    throw new Error("Could not save product images");
+  }
+}
 
+export async function getProductById(id: string) {
+  try {
+    const product = await prisma.product.findUnique({
+      where: { id },
+      include: { images: true },
+    });
     return product;
   } catch (error) {
     console.error("Error fetching product by ID:", error);
@@ -52,20 +62,8 @@ export async function getProductById(id: string) {
   }
 }
 
-interface ProductPage {
-  products: Product[];
-  total: number;
-}
-
 export async function getProducts(skip: number, take: number, search: string) {
-  const cacheKey = `${search}:${skip}:${take}`;
-
   try {
-    const cachedData = await redis.get<ProductPage>(cacheKey);
-    if (cachedData) {
-      return cachedData;
-    }
-
     const where: Prisma.ProductWhereInput = {
       OR: [
         { name: { contains: search, mode: "insensitive" } },
@@ -80,15 +78,21 @@ export async function getProducts(skip: number, take: number, search: string) {
         where,
         skip,
         take,
+        include: { images: true },
       }),
       prisma.product.count({ where }),
     ]);
 
-    const result: ProductPage = { products, total };
+    // Convert image buffers to base64 strings
+    const productsWithBase64Images = products.map((product) => ({
+      ...product,
+      images: product.images.map((image) => ({
+        ...image,
+        data: image.data.toString("base64"),
+      })),
+    }));
 
-    await redis.setex(cacheKey, CACHE_EXPIRATION, result);
-
-    return result;
+    return { products: productsWithBase64Images, total };
   } catch (error) {
     console.error("Error fetching products:", error);
     throw new Error("Could not fetch products");
@@ -96,20 +100,12 @@ export async function getProducts(skip: number, take: number, search: string) {
 }
 
 export async function getLatestProducts() {
-  const cacheKey = `latest`;
-
   try {
-    const cachedData = await redis.get<Product[]>(cacheKey);
-    if (cachedData) {
-      return cachedData;
-    }
-
     const result = await prisma.product.findMany({
       orderBy: { createdAt: "desc" },
       take: 10,
+      include: { images: true },
     });
-
-    await redis.setex(cacheKey, CACHE_EXPIRATION, result);
 
     return result;
   } catch (error) {

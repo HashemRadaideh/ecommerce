@@ -1,6 +1,6 @@
 "use client";
 
-import { Category, Product } from "@prisma/client";
+import { Category, Product, Image } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -13,8 +13,12 @@ import ProductSkeleton from "@/components/ProductSkeleton";
 import { Button } from "@/components/ui/button";
 import { api, cn } from "@/lib/utils";
 
+interface ProductWithImages extends Product {
+  images: Image[];
+}
+
 interface PaginatedProducts {
-  products: Product[];
+  products: ProductWithImages[];
   total: number;
 }
 
@@ -76,22 +80,28 @@ export default function CategoryProducts({ category }: { category: Category }) {
 
       <div className={cn("flex overflow-y-scroll w-full max-h-[425px]")}>
         <Suspense fallback={<LoadingSkeleton />}>
-          {query.data?.products.map((product) => (
-            <Link
-              href={`/product/${product.id}`}
-              key={product.id}
-              className={cn("max-w-[250px] m-2")}
-            >
-              <ProductCard
-                title={product.name}
-                description={product.description || ""}
-                image={"/placeholder.png"}
-                imageAlt={product.name}
-                price={product.price}
-                stock={product.stockQuantity}
-              />
-            </Link>
-          ))}
+          {query.data?.products.map((product) => {
+            const image = product.images[0]
+              ? `data:${product.images[0].fileType};base64,${product.images[0].data}`
+              : "/placeholder.png";
+
+            return (
+              <Link
+                href={`/product/${product.id}`}
+                key={product.id}
+                className={cn("max-w-[250px] m-2")}
+              >
+                <ProductCard
+                  title={product.name}
+                  description={product.description || ""}
+                  image={image}
+                  imageAlt={product.name}
+                  price={product.price}
+                  stock={product.stockQuantity}
+                />
+              </Link>
+            );
+          })}
         </Suspense>
       </div>
     </>
