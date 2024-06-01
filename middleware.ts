@@ -51,6 +51,14 @@ export async function middleware(req: NextRequest) {
       }
     }
 
+    if (req.nextUrl.pathname.startsWith("/cart")) {
+      if (isAdmin && !req.nextUrl.pathname.startsWith(`/cart/${id}`)) {
+        return NextResponse.redirect(new URL(`/cart/${id}`, req.url));
+      } else if (!isAdmin && !req.nextUrl.pathname.startsWith(`/cart/${id}`)) {
+        return NextResponse.redirect(new URL(`/cart/${id}`, req.url));
+      }
+    }
+
     // Allow access to other paths if authenticated
     return NextResponse.next();
   }

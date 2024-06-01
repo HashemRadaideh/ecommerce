@@ -5,6 +5,7 @@ import express from "express";
 import morgan from "morgan";
 
 import { auth } from "./routes/auth";
+import { cart } from "./routes/cart";
 import { category } from "./routes/category";
 import { orders } from "./routes/orders";
 import { product } from "./routes/product";
@@ -41,7 +42,7 @@ api.use(
 );
 
 // routes
-api.use("/api/v1", auth, users, category, product, search, orders);
+api.use("/api/v1", auth, users, category, product, search, orders, cart);
 
 api.listen(process.env.PORT || 8080, () => {
   console.log(
