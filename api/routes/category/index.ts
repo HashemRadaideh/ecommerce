@@ -12,7 +12,7 @@ category
     try {
       const { name, description } = req.body;
       addCategory(name, description);
-      res.status(200);
+      res.status(200).json({ message: "Successfully added category" });
     } catch (error) {
       console.error("Adding category failed", error);
       res.status(500).json({ error: "Adding category failed" });

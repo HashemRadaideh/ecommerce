@@ -4,6 +4,7 @@ import { Product } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,9 +23,11 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Skeleton } from "@/components/ui/skeleton";
-import { api } from "@/lib/utils";
+import { api, cn } from "@/lib/utils";
 
 export default function ProductPage({ id }: { id: string }) {
+  const [quantity, setQuantity] = useState(1);
+
   const query = useQuery({
     queryKey: [id],
     queryFn: async () => {
@@ -101,8 +104,48 @@ export default function ProductPage({ id }: { id: string }) {
           <Image src={""} alt={query.data?.name!} />
           <span className="text-3xl">Price: {query.data?.price}$</span>
         </CardContent>
-        <CardFooter>
-          <Button className="w-full">Add to cart</Button>
+        <CardFooter className={cn("flex justify-between")}>
+          <Button
+            type="button"
+            className=""
+            onClick={async () => {
+              await axios.post(
+                `${api}/cart`,
+                {
+                  token: localStorage.getItem("token"),
+                  product: query.data,
+                  quantity,
+                },
+                {
+                  headers: {
+                    authorization: `Bearer ${localStorage.getItem("token")}`,
+                  },
+                },
+              );
+            }}
+          >
+            Add to cart
+          </Button>
+
+          <div>
+            <Button
+              onClick={() => {
+                if (quantity === query.data?.stockQuantity) return;
+                setQuantity(quantity + 1);
+              }}
+            >
+              +
+            </Button>
+            <span className={cn("px-6")}>{quantity}</span>
+            <Button
+              onClick={() => {
+                if (quantity === 1) return;
+                setQuantity(quantity - 1);
+              }}
+            >
+              -
+            </Button>
+          </div>
         </CardFooter>
       </Card>
     </>

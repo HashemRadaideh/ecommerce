@@ -1,3 +1,4 @@
+import { Category } from "@prisma/client";
 import express from "express";
 import type { Request, Response } from "express";
 
@@ -26,11 +27,11 @@ product
       const { name, description, category, price, stock_quantity } = req.body;
       const cat = await getCategoryByName(category);
       if (!cat) {
-        res.status(500).json({ error: "Invalid category" });
+        res.status(404).json({ error: "Category not found" });
         return;
       }
       addProduct(name, description, price, stock_quantity, cat.id);
-      res.status(200);
+      res.status(200).json({ message: "Successfully added product" });
     } catch (error) {
       console.error("Adding product failed", error);
       res.status(500).json({ error: "Adding product failed" });
@@ -40,7 +41,7 @@ product
 product.route("/products").get(async (req: Request, res: Response) => {
   const skip = parseInt(req.query.skip as string, 10) || 0;
   const take = parseInt(req.query.take as string, 10) || 10;
-  const search = (req.query.take as string) || "";
+  const search = (req.query.search as string) || "";
 
   try {
     const { products, total } = await getProducts(skip, take, search);
