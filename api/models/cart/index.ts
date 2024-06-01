@@ -42,8 +42,6 @@ export async function getCart(id: string) {
       },
     });
 
-    console.log(cart);
-
     // await redis.setex(cacheKey, CACHE_EXPIRATION, cart);
 
     return cart.map((cartItem) => {

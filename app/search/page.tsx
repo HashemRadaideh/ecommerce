@@ -33,7 +33,6 @@ export default function Search() {
         params: { skip, take, search },
         withCredentials: true,
       });
-      console.log(data);
       return data;
     },
     enabled: !!search,

@@ -14,7 +14,6 @@ cart.route("/cart").get(authorize, async (req: Request, res: Response) => {
 
   try {
     const cart = await getCart(id);
-    console.log(cart);
     res.status(200).json(cart);
   } catch (error) {
     console.error("Adding category failed", error);

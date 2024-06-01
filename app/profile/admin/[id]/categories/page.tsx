@@ -48,6 +48,8 @@ export default function AdminCategories({
         },
       });
 
+      form.reset();
+
       toast({
         title: "Added category successfully",
       });

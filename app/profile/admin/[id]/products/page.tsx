@@ -26,6 +26,7 @@ const formSchema = z.object({
   category: z.string(),
   stock_quantity: z.number(),
   price: z.number(),
+  images: z.array(z.instanceof(File)).optional(),
 });
 
 export default function AdminProducts({ params }: { params: { id: string } }) {
@@ -37,18 +38,35 @@ export default function AdminProducts({ params }: { params: { id: string } }) {
       category: "",
       stock_quantity: 0,
       price: 0,
+      images: [],
     },
   });
 
   const { toast } = useToast();
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+    const formData = new FormData();
+    formData.append("name", values.name);
+    formData.append("description", values.description);
+    formData.append("category", values.category);
+    formData.append("price", values.price.toString());
+    formData.append("stock_quantity", values.stock_quantity.toString());
+    if (values.images) {
+      values.images.forEach((image) => {
+        formData.append("images", image);
+      });
+    }
+
     try {
-      await axios.post(`${api}/product`, values, {
+      await axios.post(`${api}/product`, formData, {
         headers: {
+          "Content-Type": "multipart/form-data",
           authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+
+      form.reset();
+
       toast({
         title: "Added product successfully",
       });
@@ -150,6 +168,28 @@ export default function AdminProducts({ params }: { params: { id: string } }) {
                       type="number"
                       {...field}
                       {...form.register("price", { valueAsNumber: true })}
+                    />
+                  </FormControl>
+                  <FormDescription></FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="images"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Product Price</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      multiple
+                      onChange={(e) => {
+                        const files = Array.from(e.target.files ?? []);
+                        form.setValue("images", files);
+                      }}
                     />
                   </FormControl>
                   <FormDescription></FormDescription>

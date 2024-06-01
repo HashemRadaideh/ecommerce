@@ -1,11 +1,31 @@
-import { Category } from "@prisma/client";
 import express from "express";
 import type { Request, Response } from "express";
+import multer from "multer";
 
 import { authorize } from "@/api/middleware/authorize";
 import { getCategoryByName } from "@/api/models/category";
 import { getLatestProducts } from "@/api/models/product";
 import { addProduct, getProductById, getProducts } from "@/api/models/product";
+
+const storage = multer.memoryStorage();
+
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "uploads/");
+//   },
+//   filename: (req, file, cb) => {
+//     const filename = `${Date.now()}-${file.originalname}`;
+//     cb(null, filename);
+//   },
+// });
+
+const upload = multer({
+  storage,
+  // limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (_req, _file, cb) => {
+    cb(null, true);
+  },
+});
 
 export const product = express.Router();
 
@@ -22,21 +42,26 @@ product.route("/product").get(async (req: Request, res: Response) => {
 
 product
   .route("/product")
-  .post(authorize, async (req: Request, res: Response) => {
-    try {
-      const { name, description, category, price, stock_quantity } = req.body;
-      const cat = await getCategoryByName(category);
-      if (!cat) {
-        res.status(404).json({ error: "Category not found" });
-        return;
+  .post(
+    authorize,
+    upload.array("images"),
+    async (req: Request, res: Response) => {
+      try {
+        const { name, description, category, price, stock_quantity } = req.body;
+        const images = req.files as Express.Multer.File[];
+        const cat = await getCategoryByName(category);
+        if (!cat) {
+          res.status(404).json({ error: "Category not found" });
+          return;
+        }
+        addProduct(name, description, price, stock_quantity, cat.id);
+        res.status(200).json({ message: "Successfully added product" });
+      } catch (error) {
+        console.error("Adding product failed", error);
+        res.status(500).json({ error: "Adding product failed" });
       }
-      addProduct(name, description, price, stock_quantity, cat.id);
-      res.status(200).json({ message: "Successfully added product" });
-    } catch (error) {
-      console.error("Adding product failed", error);
-      res.status(500).json({ error: "Adding product failed" });
-    }
-  });
+    },
+  );
 
 product.route("/products").get(async (req: Request, res: Response) => {
   const skip = parseInt(req.query.skip as string, 10) || 0;
@@ -46,18 +71,6 @@ product.route("/products").get(async (req: Request, res: Response) => {
   try {
     const { products, total } = await getProducts(skip, take, search);
     res.status(200).json({ products, total });
-
-    // res.setHeader("Content-Type", "application/json");
-    // res.setHeader("Transfer-Encoding", "chunked");
-
-    // res.write('{"products":[');
-
-    // for (const product of products) {
-    //   res.write(JSON.stringify(product) + ",");
-    // }
-
-    // res.write(`],"total":${total}}`);
-    // res.end();
   } catch (error) {
     console.error("Failed to get all products", error);
     res.status(500).json({ error: "Failed to get all products" });

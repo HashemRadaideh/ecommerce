@@ -46,8 +46,6 @@ export default function UserId({ params }: { params: { id: string } }) {
         },
       });
 
-      console.log(data);
-
       return data;
     },
   });

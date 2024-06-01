@@ -41,8 +41,6 @@ export default function ProductPage({ id }: { id: string }) {
     },
   });
 
-  console.log(`${api}/product?id=${id}`);
-
   return query.isLoading ? (
     <>
       <Carousel className="w-full max-w-lg m-10">
