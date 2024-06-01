@@ -1,6 +1,6 @@
 "use client";
 
-import { Product } from "@prisma/client";
+import { Product, Image as ProductImage } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { ArrowLeft, ArrowRight, Search } from "lucide-react";
@@ -14,8 +14,12 @@ import { api, cn } from "@/lib/utils";
 import ProductRow from "./ProductRow";
 import { Button } from "./ui/button";
 
+interface ProductWithImages extends Product {
+  images: ProductImage[];
+}
+
 interface PaginatedProducts {
-  products: Product[];
+  products: ProductWithImages[];
   total: number;
 }
 
@@ -91,7 +95,7 @@ export default function Searchbar() {
 
       <div
         className={cn(
-          `rounded-lg border bg-card text-card-foreground shadow-sm`, //${search.length > 0 ? "visible" : "invisible"}`,
+          `rounded-lg border bg-card text-card-foreground shadow-sm`,
           { visible: search.length > 0, invisible: search.length === 0 },
         )}
       >
@@ -108,7 +112,11 @@ export default function Searchbar() {
                     <ProductRow
                       title={product.name}
                       description={product.description || ""}
-                      image={"/placeholder.png"}
+                      image={
+                        product.images.length > 0
+                          ? `data:${product.images[0].fileType};base64,${product.images[0].data}`
+                          : "/placeholder.png"
+                      }
                       imageAlt={product.name}
                       price={product.price}
                       stock={product.stockQuantity}

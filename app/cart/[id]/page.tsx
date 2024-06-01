@@ -10,6 +10,8 @@ import { Navbar } from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
 import { api } from "@/lib/utils";
 
+import { Map } from "./map";
+
 interface CartItems {
   product: Product;
   quantity: number;
@@ -60,6 +62,7 @@ export default function UserId({ params }: { params: { id: string } }) {
             <DataTable columns={columns} data={query.data} />
           </Card>
         )}
+        <Map />
       </main>
     </>
   );

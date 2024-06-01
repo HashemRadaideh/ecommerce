@@ -1,5 +1,7 @@
 import { Prisma, PrismaClient, Product } from "@prisma/client";
 
+import { CACHE_EXPIRATION, redis } from "@/api/utils/redis";
+
 const prisma = new PrismaClient();
 
 export async function addProduct(
@@ -55,7 +57,16 @@ export async function getProductById(id: string) {
       where: { id },
       include: { images: true },
     });
+
     return product;
+
+    // // Convert image buffers to base64 strings
+    // const productWithBase64Images = product?.images.map((image) => ({
+    //   ...image,
+    //   data: image.data.toString("base64"),
+    // }));
+
+    // return productWithBase64Images;
   } catch (error) {
     console.error("Error fetching product by ID:", error);
     throw new Error("Could not fetch product by ID");
@@ -100,14 +111,34 @@ export async function getProducts(skip: number, take: number, search: string) {
 }
 
 export async function getLatestProducts() {
+  const cacheKey = `latest`;
+
   try {
-    const result = await prisma.product.findMany({
+    // const cachedData = await redis.get<Product[]>(cacheKey);
+    // if (cachedData) {
+    //   return cachedData;
+    // }
+
+    const products = await prisma.product.findMany({
       orderBy: { createdAt: "desc" },
       take: 10,
-      include: { images: true },
+      include: {
+        images: true, // Include images in the query
+      },
     });
 
-    return result;
+    // Convert image buffers to base64 strings
+    const productsWithBase64Images = products.map((product) => ({
+      ...product,
+      images: product.images.map((image) => ({
+        ...image,
+        data: image.data.toString("base64"),
+      })),
+    }));
+
+    // await redis.setex(cacheKey, CACHE_EXPIRATION, result);
+
+    return productsWithBase64Images;
   } catch (error) {
     console.error("Error fetching products:", error);
     throw new Error("Could not fetch products");

@@ -1,6 +1,6 @@
 "use client";
 
-import { Product } from "@prisma/client";
+import { Product, Image as ProductImage } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Autoplay from "embla-carousel-autoplay";
@@ -18,13 +18,22 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { api, cn } from "@/lib/utils";
 
+interface ProductWithImages extends Product {
+  images: ProductImage[];
+}
+
 export default function Latests() {
   const query = useQuery({
     queryKey: ["latests"],
     queryFn: async () => {
-      const { data } = await axios.get<Product[]>(`${api}/products/latest`, {
-        withCredentials: true,
-      });
+      const { data } = await axios.get<ProductWithImages[]>(
+        `${api}/products/latest`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
       return data;
     },
   });
@@ -57,12 +66,21 @@ export default function Latests() {
                       <CardContent
                         className={cn("flex items-center justify-center p-6")}
                       >
-                        <Image
-                          src={"/placeholder.png"}
-                          alt={product.name}
-                          width={500}
-                          height={500}
-                        />
+                        {product.images.length > 0 ? (
+                          <Image
+                            src={`data:${product.images[0].fileType};base64,${product.images[0].data}`}
+                            alt={product.name}
+                            width={500}
+                            height={500}
+                          />
+                        ) : (
+                          <Image
+                            src="/placeholder.png"
+                            alt={product.name}
+                            width={500}
+                            height={500}
+                          />
+                        )}
                       </CardContent>
                     </Card>
                   </Link>

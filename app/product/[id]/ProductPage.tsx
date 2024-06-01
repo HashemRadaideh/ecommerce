@@ -1,6 +1,6 @@
 "use client";
 
-import { Product } from "@prisma/client";
+import { Product, Image as ProductImage } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
@@ -25,17 +25,24 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { api, cn } from "@/lib/utils";
 
+interface ProductWithImages extends Product {
+  images: ProductImage[];
+}
+
 export default function ProductPage({ id }: { id: string }) {
   const [quantity, setQuantity] = useState(1);
 
   const query = useQuery({
     queryKey: [id],
     queryFn: async () => {
-      const { data } = await axios.get<Product>(`${api}/product?id=${id}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("token")}`,
+      const { data } = await axios.get<ProductWithImages>(
+        `${api}/product?id=${id}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         },
-      });
+      );
 
       return data;
     },
@@ -80,10 +87,17 @@ export default function ProductPage({ id }: { id: string }) {
     <>
       <Carousel className="w-full max-w-lg m-10">
         <CarouselContent>
-          {Array.from({ length: 5 }).map((_, index) => (
+          {query.data?.images.map((image, index) => (
             <CarouselItem key={index}>
               <Card>
-                <CardContent className="flex aspect-[16/9] items-center justify-center p-6"></CardContent>
+                <CardContent className="flex aspect-[16/9] items-center justify-center p-6">
+                  <Image
+                    src={`data:${image.fileType};base64,${image.data}`}
+                    alt={query.data?.name || ""}
+                    width={500}
+                    height={500}
+                  />
+                </CardContent>
               </Card>
             </CarouselItem>
           ))}
@@ -99,7 +113,6 @@ export default function ProductPage({ id }: { id: string }) {
           <CardDescription>{query.data?.description}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col space-y-4">
-          <Image src={""} alt={query.data?.name!} />
           <span className="text-3xl">Price: {query.data?.price}$</span>
         </CardContent>
         <CardFooter className={cn("flex justify-between")}>

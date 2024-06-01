@@ -15,7 +15,7 @@ const center = {
   lng: -38.523,
 };
 
-const Map = () => {
+export const Map = () => {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
@@ -50,13 +50,3 @@ const Map = () => {
     <></>
   );
 };
-
-export default function Cart() {
-  return (
-    <>
-      <Navbar />
-
-      <Map />
-    </>
-  );
-}
