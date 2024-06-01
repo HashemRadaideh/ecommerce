@@ -13,6 +13,10 @@ export default function Usernav({ id }: { id: string }) {
       <div className={cn("flex justify-between")}>
         <ul className={cn("flex gap-8 p-4")}>
           <li>
+            <Link href={`/`}>Home</Link>
+          </li>
+
+          <li>
             <Link href={`/profile/user/${id}`}>Dashboard</Link>
           </li>
 

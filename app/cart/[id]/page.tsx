@@ -9,6 +9,7 @@ import { DataTable } from "@/components/DataTable";
 import { Navbar } from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
 import { api } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 import { Map } from "./map";
 
@@ -59,6 +60,27 @@ export default function UserId({ params }: { params: { id: string } }) {
       <main className="">
         {query.data && (
           <Card>
+            <Button
+            type="button"
+            className=""
+            onClick={async () => {
+              await axios.post(
+                `${api}/orders`,
+                {
+                  token: localStorage.getItem("token"),
+                  product: query.data,
+                  
+                },
+                {
+                  headers: {
+                    authorization: `Bearer ${localStorage.getItem("token")}`,
+                  },
+                },
+              );
+            }}
+          >
+            Add to cart
+          </Button>
             <DataTable columns={columns} data={query.data} />
           </Card>
         )}
