@@ -5,4 +5,4 @@ export const redis = new Redis({
   token: process.env.REDIS_TOKEN,
 });
 
-export const CACHE_EXPIRATION = 3600;
+export const CACHE_EXPIRATION = 60;

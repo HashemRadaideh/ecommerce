@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, useCallback, useMemo } from "react";
 import { useState } from "react";
 
 import ProductCard from "@/components/ProductCard";
@@ -37,18 +37,22 @@ export default function CategoryProducts({ category }: { category: Category }) {
     },
   });
 
-  const totalProducts = query.data?.total || 0;
-  const totalPages = Math.ceil(totalProducts / take);
+  const totalProducts = useMemo(() => query.data?.total || 0, [query]);
 
-  const handleNextPage = () => {
+  const totalPages = useMemo(
+    () => Math.ceil(totalProducts / take) - 1,
+    [totalProducts, take],
+  );
+
+  const handleNextPage = useCallback(() => {
     if (skip < totalPages) {
       setSkip((prevPage) => prevPage + take);
     }
-  };
+  }, [totalPages, skip]);
 
-  const handlePrevPage = () => {
+  const handlePrevPage = useCallback(() => {
     setSkip((prevPage) => Math.max(prevPage - take, 0));
-  };
+  }, [totalPages, skip]);
 
   return (
     <>

@@ -1,12 +1,12 @@
 "use client";
 
-import { Product } from "@prisma/client";
+import { Product, Image } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useCallback, useMemo } from "react";
 import { useState } from "react";
 
 import { Navbar } from "@/components/Navbar";
@@ -15,8 +15,12 @@ import ProductSkeleton from "@/components/ProductSkeleton";
 import { Button } from "@/components/ui/button";
 import { api, cn } from "@/lib/utils";
 
+interface ProductWithImages extends Product {
+  images: Image[];
+}
+
 interface PaginatedProducts {
-  products: Product[];
+  products: ProductWithImages[];
   total: number;
 }
 
@@ -38,18 +42,22 @@ export default function Search() {
     enabled: !!search,
   });
 
-  const totalProducts = query.data?.total || 0;
-  const totalPages = Math.ceil(totalProducts / take);
+  const totalProducts = useMemo(() => query.data?.total || 0, [query]);
 
-  const handleNextPage = () => {
+  const totalPages = useMemo(
+    () => Math.ceil(totalProducts / take) - 1,
+    [totalProducts, take],
+  );
+
+  const handleNextPage = useCallback(() => {
     if (skip < totalPages) {
       setSkip((prevPage) => prevPage + take);
     }
-  };
+  }, [totalPages, skip]);
 
-  const handlePrevPage = () => {
+  const handlePrevPage = useCallback(() => {
     setSkip((prevPage) => Math.max(prevPage - take, 0));
-  };
+  }, [totalPages, skip]);
 
   return (
     <>
@@ -81,18 +89,28 @@ export default function Search() {
           )}
         >
           <Suspense fallback={<LoadingSkeleton />}>
-            {query.data?.products.map((product) => (
-              <Link href={`/product/${product.id}`} key={product.id}>
-                <ProductCard
-                  title={product.name}
-                  description={product.description || ""}
-                  image={"/placeholder.png"}
-                  imageAlt={product.name}
-                  price={product.price}
-                  stock={product.stockQuantity}
-                />
-              </Link>
-            ))}
+            {query.data?.products.map((product) => {
+              const image = product.images[0]
+                ? `data:${product.images[0].fileType};base64,${product.images[0].data}`
+                : "/placeholder.png";
+
+              return (
+                <Link
+                  href={`/product/${product.id}`}
+                  key={product.id}
+                  className={cn("max-w-[250px] m-2")}
+                >
+                  <ProductCard
+                    title={product.name}
+                    description={product.description || ""}
+                    image={image}
+                    imageAlt={product.name}
+                    price={product.price}
+                    stock={product.stockQuantity}
+                  />
+                </Link>
+              );
+            })}
           </Suspense>
         </div>
       </main>

@@ -6,7 +6,7 @@ import axios from "axios";
 import { ArrowLeft, ArrowRight, Search } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 
 import { Input } from "@/components/ui/input";
 import { api, cn } from "@/lib/utils";
@@ -62,18 +62,20 @@ export default function Searchbar() {
     router.push(`/search?q=${encodedSearch}`);
   };
 
-  const totalProducts = query.data?.total || 0;
-  const totalPages = Math.ceil(totalProducts / take);
+  const totalPages = useMemo(
+    () => Math.ceil(query.data?.total || 0 / take) - 1,
+    [query.data?.total, take],
+  );
 
-  const handleNextPage = () => {
+  const handleNextPage = useCallback(() => {
     if (skip < totalPages) {
       setSkip((prevPage) => prevPage + take);
     }
-  };
+  }, [totalPages, skip]);
 
-  const handlePrevPage = () => {
+  const handlePrevPage = useCallback(() => {
     setSkip((prevPage) => Math.max(prevPage - take, 0));
-  };
+  }, [totalPages, skip]);
 
   return (
     <div className="flex flex-col gap-2 p-2">
